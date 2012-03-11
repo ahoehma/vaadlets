@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.mymita</groupId>
+  <artifactId>vaadlets-root</artifactId>
+  <version>0.0.1</version>
+  <packaging>pom</packaging>
+  
+  <name>vaadlets root project</name>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <addonBaseName>vaadlets-addon</addonBaseName>
+    <addonFullName>${addonBaseName}-${project.version}</addonFullName>
+    <addonJarName>${addonFullName}.jar</addonJarName>
+  </properties>
+  
+  <modules>
+    <module>parent</module>
+    <module>addon</module>
+    <module>demo</module>
+    <module>manual</module>
+  </modules>
+  
+  <build>
+    <plugins>
+      <!-- Build a ZIP package for the Vaadin add-on, including documentation etc. -->
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.2-beta-5</version>
+        <configuration>
+          <finalName>${addonFullName}</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
+          <descriptors>
+            <!-- First extract the manifest from the JAR -->
+            <descriptor>assembly/extractManifest.xml</descriptor>
+            <!-- Then build the ZIP, including a copy of the manifest -->
+            <descriptor>assembly/addon.xml</descriptor>
+          </descriptors>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

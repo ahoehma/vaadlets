@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:xl="http://www.w3.org/1999/xlink">
+    <info>
+        <title>MyAddon 0.0.1 Manual</title>
+        <author>
+            <personname>
+                <firstname>Firstname</firstname>
+                <surname>Lastname</surname>
+            </personname>
+            <email>firstname.lastname@example.com</email>
+        </author>
+        <copyright>
+            <year>2011</year>
+            <holder>my organization</holder>
+        </copyright>
+    </info>
+
+    <section xml:id="introduction">
+        <title>Introduction</title>
+        <para>
+            Document the MyAddon add-on for <link xl:href="http://vaadin.com">Vaadin</link> here.
+        </para>
+    </section>
+
+    <section xml:id="usage">
+        <title>Using MyAddon</title>
+        <para>
+            This is another section.
+        </para>
+
+        <para>
+            A section can have multiple paragraphs. You can do formatting using pre-defined styles such as
+            <classname>MyClass&lt;T&gt;</classname>, <interfacename>@NotNull</interfacename> etc. 
+        </para>
+        
+        <para>
+            Program listings can also be included in the documentation:
+            
+            <programlisting language="java"><![CDATA[
+import mypackage.*;
+
+public class MyClass {
+    // ... listing here
+}
+                ]]></programlisting>
+        </para>
+    </section>
+
+    <section xml:id="another_section">
+        <title>Another section</title>
+        <para>
+            You can link from one section to another: <xref linkend="usage"/>.
+        </para>
+    </section>
+
+</article>

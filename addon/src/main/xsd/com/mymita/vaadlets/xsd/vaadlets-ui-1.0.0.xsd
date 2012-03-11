@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:ui="http://www.mymita.com/vaadlets/ui/1.0.0"
+        targetNamespace="http://www.mymita.com/vaadlets/ui/1.0.0"
+        xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
+        elementFormDefault="qualified" version="1.0" xml:lang="en">
+  <import namespace="http://www.mymita.com/vaadlets/layout/1.0.0" schemaLocation="vaadlets-layout-1.0.0.xsd"/>
+  <complexType name="panel">
+    <complexContent>
+      <extension base="layout:layoutableComponent">
+        <attribute name="scrollable" type="boolean" default="false"/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="window">
+    <complexContent>
+      <extension base="ui:panel">
+        <attribute name="border" type="string"/>
+        <attribute name="positionX" type="short"/>
+        <attribute name="positionY" type="short"/>
+        <attribute name="resizeable" type="boolean" default="true"/>
+        <attribute name="resizeLazy" type="boolean" default="false"/>
+        <attribute name="closeable" type="boolean" default="true"/>
+        <attribute name="draggable" type="boolean" default="true"/>
+        <attribute name="modal" type="boolean" default="false"/>
+        <attribute name="center" type="boolean" default="false"/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="panel" type="ui:panel"/>
+  <element name="window" type="ui:window"/>
+  <group name="components">
+    <choice>
+      <element ref="ui:panel"/>
+      <element ref="ui:window"/>
+      <element ref="layout:gridLayout"/>
+      <element ref="layout:cssLayout"/>
+      <element ref="layout:customLayout"/>
+      <element ref="layout:formLayout"/>
+      <element ref="layout:horizontalLayout"/>
+      <element ref="layout:verticalLayout"/>
+    </choice>
+  </group>
+</schema>

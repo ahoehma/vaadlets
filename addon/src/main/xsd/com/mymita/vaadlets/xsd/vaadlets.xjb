@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               jaxb:version="1.0">
+  <jaxb:bindings schemaLocation="vaadlets-1.0.0.xsd"  node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="com.mymita.vaadlets"/>
+    </jaxb:schemaBindings>
+    <jaxb:bindings node="/xsd:schema/xsd:complexType[@name='vaadlets']/xsd:choice">
+      <jaxb:property name="rootComponent"/>
+    </jaxb:bindings>
+  </jaxb:bindings>
+  <jaxb:bindings schemaLocation="vaadlets-core-1.0.0.xsd"  node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="com.mymita.vaadlets.core"/>
+    </jaxb:schemaBindings>
+    <jaxb:bindings node="/xsd:schema/xsd:complexType[@name='componentContainer']/xsd:complexContent/xsd:extension/xsd:choice">
+      <jaxb:property name="components"/>
+    </jaxb:bindings>
+  </jaxb:bindings>
+  <jaxb:bindings schemaLocation="vaadlets-layout-1.0.0.xsd"  node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="com.mymita.vaadlets.layout"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+  <jaxb:bindings schemaLocation="vaadlets-ui-1.0.0.xsd"  node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="com.mymita.vaadlets.ui"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
+</jaxb:bindings>

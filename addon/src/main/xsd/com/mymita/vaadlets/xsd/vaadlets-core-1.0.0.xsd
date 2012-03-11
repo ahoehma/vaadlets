@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
+        targetNamespace="http://www.mymita.com/vaadlets/core/1.0.0"
+        xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
+        xmlns:ui="http://www.mymita.com/vaadlets/ui/1.0.0"
+        elementFormDefault="qualified" version="1.0" xml:lang="en">
+  <import namespace="http://www.mymita.com/vaadlets/layout/1.0.0" schemaLocation="vaadlets-layout-1.0.0.xsd"/>
+  <import namespace="http://www.mymita.com/vaadlets/ui/1.0.0" schemaLocation="vaadlets-ui-1.0.0.xsd"/>
+  <element name="include">
+    <complexType>
+      <attribute name="src" use="required"/>
+    </complexType>
+  </element>
+  <element name="repeat">
+    <complexType mixed="true">
+      <choice minOccurs="0" maxOccurs="unbounded">
+        <group ref="ui:components" />
+      </choice>
+      <attribute name="value" use="required"/>
+      <attribute name="var" use="required"/>
+    </complexType>
+  </element>
+  <complexType name="component" mixed="false" abstract="true">
+    <attribute name="id" />
+    <attribute name="enabled" type="boolean" />
+    <attribute name="visible" type="boolean" />
+    <attribute name="readonly" type="boolean" />
+    <attribute name="caption" type="string" />
+    <attribute name="stylename" type="string" />
+    <attribute name="width" type="string" />
+    <attribute name="height" type="string" />
+    <attributeGroup ref="layout:layoutableComponentAttributes"/>
+  </complexType>
+  <complexType name="componentContainer" abstract="true">
+    <complexContent>
+      <extension base="core:component">
+        <choice minOccurs="0" maxOccurs="unbounded">
+          <group ref="ui:components" />
+        </choice>
+      </extension>
+    </complexContent>
+  </complexType>
+</schema>

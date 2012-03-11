@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.mymita</groupId>
+    <artifactId>vaadlets-parent</artifactId>
+    <version>0.0.1</version>
+    <relativePath>../parent/pom.xml</relativePath>
+  </parent>
+  <artifactId>vaadlets-manual</artifactId>
+  <packaging>pom</packaging>
+  <name>vaadlets - User Manual</name>
+  <description>User manual for vaadlets</description>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.agilejava.docbkx</groupId>
+        <artifactId>docbkx-maven-plugin</artifactId>
+        <version>2.0.9</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate-pdf</goal>
+            </goals>
+            <phase>generate-sources</phase>
+          </execution>
+        </executions>
+        <configuration>
+          <imgSrcPath>file:///${basedir}/src/docbkx/img/</imgSrcPath>
+          <preProcess>
+            <copy todir="${basedir}/target/docbkx/html">
+              <fileset dir="${basedir}/src/docbkx/img"/>
+            </copy>
+          </preProcess>
+          <highlightSource>1</highlightSource>
+          <foCustomization>${basedir}/src/docbkx/fopdf.xsl</foCustomization>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>net.sf.docbook</groupId>
+            <artifactId>docbook-xml</artifactId>
+            <version>5.0-all</version>
+            <type>zip</type>
+            <classifier>resources</classifier>
+          </dependency>
+          <dependency>
+            <groupId>net.sf.docbook</groupId>
+            <artifactId>docbook-xsl</artifactId>
+            <version>1.75.1</version>
+            <type>zip</type>
+            <classifier>ns-resources</classifier>
+          </dependency>
+        </dependencies>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <version>2.5</version>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

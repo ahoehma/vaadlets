@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
+        targetNamespace="http://www.mymita.com/vaadlets/layout/1.0.0"
+        xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
+        elementFormDefault="qualified" version="1.0" xml:lang="en">
+  <import namespace="http://www.mymita.com/vaadlets/core/1.0.0" schemaLocation="vaadlets-core-1.0.0.xsd"/>
+  <complexType name="abstractLayout" abstract="true">
+    <complexContent>
+      <extension base="core:componentContainer">
+        <attribute name="margin" type="boolean" />
+        <attribute name="margin-top" type="boolean" />
+        <attribute name="margin-right" type="boolean" />
+        <attribute name="margin-bottom" type="boolean" />
+        <attribute name="margin-left" type="boolean" />
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="orderedLayout" abstract="true">
+    <complexContent>
+      <extension base="layout:abstractLayout">
+        <attribute name="spacing" type="boolean" />
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="verticalLayout">
+    <complexContent>
+      <extension base="layout:orderedLayout">
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="horizontalLayout">
+    <complexContent>
+      <extension base="layout:orderedLayout">
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="formLayout">
+    <complexContent>
+      <extension base="layout:orderedLayout">
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="cssLayout">
+    <complexContent>
+      <extension base="layout:abstractLayout">
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="customLayout">
+    <complexContent>
+      <extension base="layout:abstractLayout">
+        <attribute name="template" type="string"/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="gridLayout">
+    <complexContent>
+      <extension base="layout:abstractLayout">
+        <attribute name="columns" type="short"/>
+        <attribute name="rows" type="short"/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="layout">
+    <restriction base="string">
+      <enumeration value="absolute"/>
+      <enumeration value="css"/>
+      <enumeration value="custom"/>
+      <enumeration value="form"/>
+      <enumeration value="grid"/>
+      <enumeration value="horizontal"/>
+      <enumeration value="vertical"/>
+    </restriction>
+  </simpleType>
+  <simpleType name="alignment">
+    <restriction base="string">
+      <enumeration value="top_left"/>
+      <enumeration value="top_middle"/>
+      <enumeration value="top_right"/>
+      <enumeration value="middle_left"/>
+      <enumeration value="middle_middle"/>
+      <enumeration value="middle_right"/>
+      <enumeration value="bottom_left"/>
+      <enumeration value="bottom_middle"/>
+      <enumeration value="bottom_right"/>
+    </restriction>
+  </simpleType>
+  <attributeGroup name="layoutableComponentAttributes">
+    <attribute name="column" type="short"/>
+    <attribute name="row" type="short"/>
+    <attribute name="alignment" type="layout:alignment"/>
+    <attribute name="expandRatio" type="short"/>
+  </attributeGroup>
+  <complexType name="layoutableComponent" abstract="true">
+    <complexContent>
+      <extension base="core:componentContainer">
+        
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="verticalLayout" type="layout:verticalLayout"/>
+  <element name="horizontalLayout" type="layout:horizontalLayout"/>
+  <element name="formLayout" type="layout:formLayout"/>
+  <element name="cssLayout" type="layout:cssLayout"/>
+  <element name="customLayout" type="layout:customLayout"/>
+  <element name="gridLayout" type="layout:gridLayout"/>
+</schema>

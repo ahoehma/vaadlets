@@ -9,7 +9,7 @@ PREREQUISITES
 
 CHECKING OUT THE CODE
 
-  The source code is maintained in vaadlets Subversion repository. To check
+  The source code is maintained at github. To check
   out the latest development version, use the following command:
 
     $ git clone https://github.com/ahoehma/vaadlets
@@ -17,6 +17,7 @@ CHECKING OUT THE CODE
 EDITING THE CODE IN AN IDE
 
   The vaadlets add-on project can be imported in any IDE that supports Maven.
+  The Eclipse will be the default IDE. 
 
 TRYING OUT THE DEMO
 
@@ -31,7 +32,7 @@ TRYING OUT THE DEMO
 
   3. Open your favorite web browser and point it to:
 
-    http://localhost:8080/demo/
+    http://localhost:8080/vaadlets-demo/
 
 READING THE MANUAL
 
@@ -42,11 +43,3 @@ READING THE MANUAL
 
   2. Open the file manual/target/docbkx/html/manual.html
      in your favorite web browser.
-
-PUBLISHING THE ADD-ON
-
-  1. Build the add-on:
-
-    $ mvn package assembly:assembly
-
-  2. Publish the add-on to the Vaadin directory (http://vaadin.com/directory)

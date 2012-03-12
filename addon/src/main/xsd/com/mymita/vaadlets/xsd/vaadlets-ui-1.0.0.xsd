@@ -3,8 +3,10 @@
         xmlns:ui="http://www.mymita.com/vaadlets/ui/1.0.0"
         targetNamespace="http://www.mymita.com/vaadlets/ui/1.0.0"
         xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
+        xmlns:input="http://www.mymita.com/vaadlets/input/1.0.0"
         elementFormDefault="qualified" version="1.0" xml:lang="en">
   <import namespace="http://www.mymita.com/vaadlets/layout/1.0.0" schemaLocation="vaadlets-layout-1.0.0.xsd"/>
+  <import namespace="http://www.mymita.com/vaadlets/input/1.0.0" schemaLocation="vaadlets-input-1.0.0.xsd"/>
   <simpleType name="contentMode">
     <restriction base="string">
       <enumeration value="CONTENT_TEXT"/>
@@ -18,6 +20,26 @@
     <complexContent>
       <extension base="layout:layoutableComponent">
         <attribute name="scrollable" type="boolean" default="false"/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="abstractSplitPanel" abstract="true">
+    <complexContent>
+      <extension base="layout:abstractLayout">
+        <attribute name="locked" type="boolean" default="false"/>
+        <attribute name="split-position" type="string" default="50%"/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="verticalSplitPanel">
+    <complexContent>
+      <extension base="ui:abstractSplitPanel">
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="horizontalSplitPanel">
+    <complexContent>
+      <extension base="ui:abstractSplitPanel">
       </extension>
     </complexContent>
   </complexType>
@@ -46,6 +68,8 @@
   <group name="components">
     <choice>
       <element ref="ui:panel"/>
+      <element ref="ui:verticalSplitPanel"/>
+      <element ref="ui:horizontalSplitPanel"/>
       <element ref="ui:window"/>
       <element ref="ui:label"/>
       <element ref="layout:gridLayout"/>
@@ -54,9 +78,15 @@
       <element ref="layout:formLayout"/>
       <element ref="layout:horizontalLayout"/>
       <element ref="layout:verticalLayout"/>
+      <element ref="input:textField"/>
+      <element ref="input:passwordField"/>
+      <element ref="input:textArea"/>
+      <element ref="input:button"/>
     </choice>
   </group>
   <element name="panel" type="ui:panel"/>
+  <element name="horizontalSplitPanel" type="ui:horizontalSplitPanel"/>
+  <element name="verticalSplitPanel" type="ui:verticalSplitPanel"/>
   <element name="window" type="ui:window"/>
   <element name="label" type="ui:label"/>
 </schema>

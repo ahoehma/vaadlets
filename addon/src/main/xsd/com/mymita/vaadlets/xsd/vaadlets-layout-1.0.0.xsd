@@ -81,7 +81,7 @@
     <attribute name="column2" type="short"/>
     <attribute name="row2" type="short"/>
     <attribute name="alignment" type="layout:alignment"/>
-    <attribute name="expand-ratio" type="short"/>
+    <attribute name="expand-ratio" type="float"/>
   </attributeGroup>
   <complexType name="layoutableComponent" abstract="true">
     <complexContent>

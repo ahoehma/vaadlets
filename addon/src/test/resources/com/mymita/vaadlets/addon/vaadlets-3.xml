@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<vaadlets xmlns="http://www.mymita.com/vaadlets/1.0.0"
+          xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
+          xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
+          xmlns:ui="http://www.mymita.com/vaadlets/ui/1.0.0"
+          xmlns:input="http://www.mymita.com/vaadlets/input/1.0.0"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance"
+          xsd:schemaLocation="http://www.mymita.com/vaadlets/1.0.0 http://www.mymita.com/xsd/vaadlets-1.0.0.xsd
+                              http://www.mymita.com/vaadlets/core/1.0.0 http://www.mymita.com/xsd/vaadlets-core-1.0.0.xsd
+                              http://www.mymita.com/vaadlets/layout/1.0.0 http://www.mymita.com/xsd/vaadlets-layout-1.0.0.xsd
+                              http://www.mymita.com/vaadlets/ui/1.0.0 http://www.mymita.com/xsd/vaadlets-ui-1.0.0.xsd
+                              http://www.mymita.com/vaadlets/input/1.0.0 http://www.mymita.com/xsd/vaadlets-input-1.0.0.xsd">
+  <ui:window caption="Vaadlets Editor">
+    <ui:horizontalSplitPanel>
+      <layout:verticalLayout size-full="true">
+        <input:textField id="editor" size-full="true" expand-ratio="1.0"/>
+        <layout:horizontalLayout>
+          <input:button id="test" caption="Test Vaadlet"/>
+          <input:button id="reset" caption="Reset Vaadlet"/>
+        </layout:horizontalLayout>
+      </layout:verticalLayout>
+      <ui:panel id="content"/>
+    </ui:horizontalSplitPanel>
+  </ui:window>
+
+</vaadlets>

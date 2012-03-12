@@ -15,8 +15,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
@@ -26,8 +24,6 @@ import com.vaadin.ui.Window;
 public class AddonDemoApplication extends Application {
 
   private static final long serialVersionUID = 4745768698981212574L;
-  private final TextField editor = new TextField();
-  private final Panel vaadletsContent = new Panel();
 
   private static VerticalLayout createStackTraceLabel(final Exception e) {
     final VerticalLayout vl = new VerticalLayout();
@@ -39,25 +35,37 @@ public class AddonDemoApplication extends Application {
     return vl;
   }
 
+  private VaadletsBuilder vaadlets;
+
+  private void fillEditorWithDefaultXML() {
+    final Panel content = vaadlets.getComponent("content");
+    content.removeAllComponents();
+    final TextField editor = vaadlets.getComponent("editor");
+    try {
+      editor.setValue(CharStreams.toString(new InputStreamReader(new ClassPathResource("startingPoint.xml",
+          AddonDemoApplication.class).getInputStream(), "UTF-8")));
+    } catch (final IOException e) {
+    }
+  }
+
   @Override
   public void init() {
-    final HorizontalSplitPanel splitter = new HorizontalSplitPanel();
-    final Window main = new Window("Vaadlets Editor", splitter);
-    setMainWindow(main);
-    final VerticalLayout left = new VerticalLayout();
-    splitter.setFirstComponent(left);
-    splitter.setSecondComponent(vaadletsContent);
-    editor.setSizeFull();
-    left.setSizeFull();
-    left.addComponent(editor);
-    left.setExpandRatio(editor, 1.0f);
-    final HorizontalLayout buttons = new HorizontalLayout();
-    left.addComponent(buttons);
-    final Button testButton = new Button("Test Vaadlet", new ClickListener() {
+    vaadlets = new VaadletsBuilder();
+    try {
+      vaadlets.build(new ClassPathResource("demo.xml", AddonDemoApplication.class).getInputStream());
+    } catch (final IOException e1) {
+    }
+    final Window root = (Window) vaadlets.getRoot();
+    setMainWindow(root);
+
+    final Button testButton = vaadlets.getComponent("test");
+    testButton.addListener(new ClickListener() {
 
       @Override
       public void buttonClick(final ClickEvent event) {
-        vaadletsContent.removeAllComponents();
+        final Panel content = vaadlets.getComponent("content");
+        final TextField editor = vaadlets.getComponent("editor");
+        content.removeAllComponents();
         try {
           final VaadletsBuilder v = new VaadletsBuilder();
           v.build(new ByteArrayInputStream(editor.toString().getBytes()));
@@ -65,32 +73,22 @@ public class AddonDemoApplication extends Application {
           if (root instanceof Window) {
             getMainWindow().addWindow((Window) root);
           } else {
-            vaadletsContent.addComponent(root);
+            content.addComponent(root);
           }
         } catch (final Exception e) {
-          vaadletsContent.addComponent(createStackTraceLabel(e));
+          content.addComponent(createStackTraceLabel(e));
         }
       }
     });
-    final Button resetButton = new Button("Reset Vaadlet", new ClickListener() {
+    final Button resetButton = vaadlets.getComponent("reset");
+    resetButton.addListener(new ClickListener() {
 
       @Override
       public void buttonClick(final ClickEvent event) {
         fillEditorWithDefaultXML();
       }
     });
-    buttons.addComponent(resetButton);
-    buttons.addComponent(testButton);
+
     fillEditorWithDefaultXML();
-  }
-
-  private void fillEditorWithDefaultXML() {
-    vaadletsContent.removeAllComponents();
-    try {
-      editor.setValue(CharStreams.toString(new InputStreamReader(new ClassPathResource("startingPoint.xml",
-          AddonDemoApplication.class).getInputStream(), "UTF-8")));
-    } catch (final IOException e) {
-
-    }
   }
 }

@@ -28,4 +28,9 @@
       <jaxb:package name="com.mymita.vaadlets.ui"/>
     </jaxb:schemaBindings>
   </jaxb:bindings>
+  <jaxb:bindings schemaLocation="vaadlets-input-1.0.0.xsd"  node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="com.mymita.vaadlets.input"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
 </jaxb:bindings>

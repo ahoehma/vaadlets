@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:input="http://www.mymita.com/vaadlets/input/1.0.0"
+        targetNamespace="http://www.mymita.com/vaadlets/input/1.0.0"
+        xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
+        xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
+        elementFormDefault="qualified" version="1.0" xml:lang="en">
+  <import namespace="http://www.mymita.com/vaadlets/core/1.0.0" schemaLocation="vaadlets-core-1.0.0.xsd"/>
+  <import namespace="http://www.mymita.com/vaadlets/layout/1.0.0" schemaLocation="vaadlets-layout-1.0.0.xsd"/>
+  <complexType name="abstractField" abstract="true">
+    <complexContent>
+      <extension base="core:component">
+        <attribute name="required" type="boolean" default="false"/>
+        <attribute name="read-throug" type="boolean" default="true"/>
+        <attribute name="write-throug" type="boolean" default="true"/>
+        <attribute name="tab-index" type="short" default="0"/>
+        <attribute name="value" type="string"/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="textChangeEventMode">
+    <restriction base="string">
+      <enumeration value="EAGER"/>
+      <enumeration value="TIMEOUT"/>
+      <enumeration value="LAZY"/>
+    </restriction>
+  </simpleType>
+  <complexType name="abstractTextField" abstract="true">
+    <complexContent>
+      <extension base="input:abstractField">
+        <attribute name="null-setting-allowed" type="boolean" default="false"/>
+        <attribute name="inputPrompt" type="string"/>
+        <attribute name="columns" type="short" default="0"/>
+        <attribute name="max-length" type="short" default="-1"/>
+        <attribute name="text-change-event-mode" type="input:textChangeEventMode" default="LAZY"/>
+        <attribute name="text-change-timeout" type="short" default="400"/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="textField">
+    <complexContent>
+      <extension base="input:abstractTextField">
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="passwordField">
+    <complexContent>
+      <extension base="input:abstractTextField">
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="textArea">
+    <complexContent>
+      <extension base="input:abstractTextField">
+        <attribute name="rows" type="short" default="5"/>
+        <attribute name="wordwrap" type="boolean" default="true"/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <complexType name="button">
+    <complexContent>
+      <extension base="input:abstractField">
+        <attribute name="disable-on-click" type="boolean" default="false"/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <element name="textField" type="input:textField"/>
+  <element name="passwordField" type="input:passwordField"/>
+  <element name="textArea" type="input:textArea"/>
+  <element name="button" type="input:button"/>
+</schema>

@@ -3,16 +3,18 @@
           xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
           xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
           xmlns:ui="http://www.mymita.com/vaadlets/ui/1.0.0"
+          xmlns:input="http://www.mymita.com/vaadlets/input/1.0.0"
           xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance"
           xsd:schemaLocation="http://www.mymita.com/vaadlets/1.0.0 http://www.mymita.com/xsd/vaadlets-1.0.0.xsd
                               http://www.mymita.com/vaadlets/core/1.0.0 http://www.mymita.com/xsd/vaadlets-core-1.0.0.xsd
                               http://www.mymita.com/vaadlets/layout/1.0.0 http://www.mymita.com/xsd/vaadlets-layout-1.0.0.xsd
-                              http://www.mymita.com/vaadlets/ui/1.0.0 http://www.mymita.com/xsd/vaadlets-ui-1.0.0.xsd">
+                              http://www.mymita.com/vaadlets/ui/1.0.0 http://www.mymita.com/xsd/vaadlets-ui-1.0.0.xsd
+                              http://www.mymita.com/vaadlets/input/1.0.0 http://www.mymita.com/xsd/vaadlets-input-1.0.0.xsd">
   <ui:window caption="Hello World Window" center="true" width="400px" height="70%" draggable="false">
     <layout:gridLayout columns="3" rows="5" width="100%" height="100%">
       <ui:label caption="Label at grid position 0,0" column="0" row="0"/>
-      <ui:label caption="Label at grid position 0,1" column="0" row="1"/>
-      <layout:horizontalLayout column="0" row="2" column2="2" row2="2" width="100%" height="100%">
+      <ui:label caption="Label at grid position 1,0" column="1" row="0"/>
+      <layout:horizontalLayout column="0" row="1" column2="2" row2="1" width="100%" height="100%">
         <ui:panel caption="panel left" alignment="middle_left" width="100%" height="100%">
           <layout:formLayout width="100%" height="100%">
             <ui:label caption="form label left"></ui:label>
@@ -24,6 +26,16 @@
           </layout:formLayout>
         </ui:panel>
       </layout:horizontalLayout>
+      <ui:horizontalSplitPanel split-position="30%" column="0" row="2" column2="2" row2="3">
+        <layout:cssLayout>
+          <ui:label caption="split panel left" width="100%"/>
+        </layout:cssLayout>
+        <ui:panel size-full="true">
+          <ui:label caption="split panel right"/>
+        </ui:panel>
+      </ui:horizontalSplitPanel>
+      <input:button caption="Click ME!!!!" column="0" row="4"/>
+      <input:button caption="HTML" column="1" row="4" value="sdfsdfsdfsfds"/>
     </layout:gridLayout>
   </ui:window>
 </vaadlets>

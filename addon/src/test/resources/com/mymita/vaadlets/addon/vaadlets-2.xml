@@ -10,10 +10,10 @@
                               http://www.mymita.com/vaadlets/ui/1.0.0 http://www.mymita.com/xsd/vaadlets-ui-1.0.0.xsd">
 
   <layout:gridLayout columns="4" rows="2">
-    <ui:panel column="1" row="1" />
-    <ui:panel column="2" row="1" />
-    <ui:panel column="3" row="2" />
-    <layout:verticalLayout column="4" row="2">
+    <ui:panel column="1" row="0" />
+    <ui:panel column="2" row="0" />
+    <ui:panel column="3" row="0" />
+    <layout:verticalLayout column="0" row="1" column2="3" row2="1">
       <ui:panel alignment="top_left"/>
       <ui:panel alignment="top_right"/>
     </layout:verticalLayout>

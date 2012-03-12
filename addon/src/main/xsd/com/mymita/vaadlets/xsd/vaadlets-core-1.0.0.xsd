@@ -28,8 +28,10 @@
     <attribute name="readonly" type="boolean" default="false"/>
     <attribute name="caption" type="string" />
     <attribute name="style-name" type="string" />
-    <attribute name="width" type="string" />
-    <attribute name="height" type="string" />
+    <attribute name="width" type="string"/>
+    <attribute name="height" type="string"/>
+    <attribute name="size-full" type="boolean"/>
+    <attribute name="size-undefined" type="boolean"/>
     <attributeGroup ref="layout:layoutableComponentAttributes"/>
   </complexType>
   <complexType name="componentContainer" abstract="true">

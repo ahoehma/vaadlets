@@ -62,35 +62,26 @@
       </extension>
     </complexContent>
   </complexType>
-  <simpleType name="layout">
-    <restriction base="string">
-      <enumeration value="absolute"/>
-      <enumeration value="css"/>
-      <enumeration value="custom"/>
-      <enumeration value="form"/>
-      <enumeration value="grid"/>
-      <enumeration value="horizontal"/>
-      <enumeration value="vertical"/>
-    </restriction>
-  </simpleType>
   <simpleType name="alignment">
     <restriction base="string">
       <enumeration value="top_left"/>
-      <enumeration value="top_middle"/>
+      <enumeration value="top_center"/>
       <enumeration value="top_right"/>
       <enumeration value="middle_left"/>
-      <enumeration value="middle_middle"/>
+      <enumeration value="middle_center"/>
       <enumeration value="middle_right"/>
       <enumeration value="bottom_left"/>
-      <enumeration value="bottom_middle"/>
+      <enumeration value="bottom_center"/>
       <enumeration value="bottom_right"/>
     </restriction>
   </simpleType>
   <attributeGroup name="layoutableComponentAttributes">
     <attribute name="column" type="short"/>
     <attribute name="row" type="short"/>
+    <attribute name="column2" type="short"/>
+    <attribute name="row2" type="short"/>
     <attribute name="alignment" type="layout:alignment"/>
-    <attribute name="expandRatio" type="short"/>
+    <attribute name="expand-ratio" type="short"/>
   </attributeGroup>
   <complexType name="layoutableComponent" abstract="true">
     <complexContent>

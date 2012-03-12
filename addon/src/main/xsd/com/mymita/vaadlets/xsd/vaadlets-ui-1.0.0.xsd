@@ -25,10 +25,10 @@
     <complexContent>
       <extension base="ui:panel">
         <attribute name="border" type="string"/>
-        <attribute name="positionX" type="short"/>
-        <attribute name="positionY" type="short"/>
+        <attribute name="position-x" type="short"/>
+        <attribute name="position-y" type="short"/>
         <attribute name="resizeable" type="boolean" default="true"/>
-        <attribute name="resizeLazy" type="boolean" default="false"/>
+        <attribute name="resize-lazy" type="boolean" default="false"/>
         <attribute name="closeable" type="boolean" default="true"/>
         <attribute name="draggable" type="boolean" default="true"/>
         <attribute name="modal" type="boolean" default="false"/>

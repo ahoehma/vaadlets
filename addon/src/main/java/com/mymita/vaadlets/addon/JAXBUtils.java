@@ -70,18 +70,18 @@ public final class JAXBUtils {
 			.put("http://www.mymita.com/vaadlets/ui/1.0.0",
 					new ClassPathResource("com/mymita/vaadlets/xsd/vaadlets-ui-1.0.0.xsd")).build();
 
-	public static final Vaadlets unmarschal(final InputStream inputStream) {
-		return unmarschal(inputStream, true);
+	public static final Vaadlets unmarshal(final InputStream inputStream) {
+		return unmarshal(inputStream, true);
 	}
 
-	public static final Vaadlets unmarschal(final InputStream inputStream,
+	public static final Vaadlets unmarshal(final InputStream inputStream,
 			boolean validation) {
-		return validation ? unmarschal(inputStream,
+		return validation ? unmarshal(inputStream,
 				SCHEMAS.get("http://www.mymita.com/vaadlets/1.0.0"))
-				: unmarschal(inputStream, null);
+				: unmarshal(inputStream, null);
 	}
 
-	private static final Vaadlets unmarschal(final InputStream inputStream,
+	private static final Vaadlets unmarshal(final InputStream inputStream,
 			final Resource theSchemaResource) {
 		try {
 			final JAXBContext jc = JAXBContext.newInstance(CONTEXTPATH);

@@ -5,6 +5,15 @@
         xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
         elementFormDefault="qualified" version="1.0" xml:lang="en">
   <import namespace="http://www.mymita.com/vaadlets/layout/1.0.0" schemaLocation="vaadlets-layout-1.0.0.xsd"/>
+  <simpleType name="contentMode">
+    <restriction base="string">
+      <enumeration value="CONTENT_TEXT"/>
+      <enumeration value="CONTENT_PREFORMATTED"/>
+      <enumeration value="CONTENT_XHTML"/>
+      <enumeration value="CONTENT_XML"/>
+      <enumeration value="CONTENT_RAW"/>
+    </restriction>
+  </simpleType>
   <complexType name="panel">
     <complexContent>
       <extension base="layout:layoutableComponent">
@@ -27,12 +36,18 @@
       </extension>
     </complexContent>
   </complexType>
-  <element name="panel" type="ui:panel"/>
-  <element name="window" type="ui:window"/>
+  <complexType name="label">
+    <complexContent>
+      <extension base="layout:layoutableComponent">
+        <attribute name="contentMode" type="ui:contentMode" default="CONTENT_TEXT"/>
+      </extension>
+    </complexContent>
+  </complexType>
   <group name="components">
     <choice>
       <element ref="ui:panel"/>
       <element ref="ui:window"/>
+      <element ref="ui:label"/>
       <element ref="layout:gridLayout"/>
       <element ref="layout:cssLayout"/>
       <element ref="layout:customLayout"/>
@@ -41,4 +56,7 @@
       <element ref="layout:verticalLayout"/>
     </choice>
   </group>
+  <element name="panel" type="ui:panel"/>
+  <element name="window" type="ui:window"/>
+  <element name="label" type="ui:label"/>
 </schema>

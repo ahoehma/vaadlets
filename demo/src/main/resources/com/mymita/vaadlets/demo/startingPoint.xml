@@ -8,9 +8,10 @@
                               http://www.mymita.com/vaadlets/core/1.0.0 http://www.mymita.com/xsd/vaadlets-core-1.0.0.xsd
                               http://www.mymita.com/vaadlets/layout/1.0.0 http://www.mymita.com/xsd/vaadlets-layout-1.0.0.xsd
                               http://www.mymita.com/vaadlets/ui/1.0.0 http://www.mymita.com/xsd/vaadlets-ui-1.0.0.xsd">
-  <ui:window>
+  <ui:window caption="Hello World Window" center="true" width="400px" height="70%">
     <layout:gridLayout columns="3" rows="5" width="100%" height="100%">
-      <ui:label caption="Hello world" column="1" row="1"/>
+      <ui:label caption="Label at grid position 0,0" column="0" row="0"/>
+      <ui:label caption="Label at grid position 0,1" column="0" row="1"/>
     </layout:gridLayout>
   </ui:window>
 </vaadlets>

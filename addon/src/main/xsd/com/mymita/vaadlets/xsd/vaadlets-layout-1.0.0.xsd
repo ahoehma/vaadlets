@@ -57,8 +57,8 @@
   <complexType name="gridLayout">
     <complexContent>
       <extension base="layout:abstractLayout">
-        <attribute name="columns" type="short"/>
-        <attribute name="rows" type="short"/>
+        <attribute name="columns" type="short" default="1"/>
+        <attribute name="rows" type="short" default="1"/>
       </extension>
     </complexContent>
   </complexType>
@@ -95,7 +95,6 @@
   <complexType name="layoutableComponent" abstract="true">
     <complexContent>
       <extension base="core:componentContainer">
-        
       </extension>
     </complexContent>
   </complexType>

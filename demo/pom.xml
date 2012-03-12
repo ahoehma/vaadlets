@@ -23,8 +23,15 @@
       <artifactId>vaadlets-addon</artifactId>
       <version>0.0.1</version>
     </dependency>
+    <dependency>
+      <groupId>apache-log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.14</version>
+      <scope>runtime</scope>
+    </dependency>
   </dependencies>
   <build>
+    <defaultGoal>jetty:run</defaultGoal>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

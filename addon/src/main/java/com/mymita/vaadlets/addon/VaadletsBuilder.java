@@ -105,6 +105,7 @@ public class VaadletsBuilder {
       if (((com.mymita.vaadlets.ui.Window) c).isCenter()) {
         ((com.vaadin.ui.Window) result).center();
       }
+      ((com.vaadin.ui.Window) result).setModal(((com.mymita.vaadlets.ui.Window) c).isModal());
       ((com.vaadin.ui.Window) result).setClosable(((com.mymita.vaadlets.ui.Window) c).isCloseable());
       ((com.vaadin.ui.Window) result).setDraggable(((com.mymita.vaadlets.ui.Window) c).isDraggable());
       ((com.vaadin.ui.Window) result).setResizable(((com.mymita.vaadlets.ui.Window) c).isResizeable());

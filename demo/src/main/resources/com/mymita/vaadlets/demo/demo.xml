@@ -4,22 +4,33 @@
           xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
           xmlns:ui="http://www.mymita.com/vaadlets/ui/1.0.0"
           xmlns:input="http://www.mymita.com/vaadlets/input/1.0.0"
+          xmlns:addon="http://www.mymita.com/vaadlets/addon/1.0.0"
           xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance"
           xsd:schemaLocation="http://www.mymita.com/vaadlets/1.0.0 http://www.mymita.com/xsd/vaadlets-1.0.0.xsd
                               http://www.mymita.com/vaadlets/core/1.0.0 http://www.mymita.com/xsd/vaadlets-core-1.0.0.xsd
                               http://www.mymita.com/vaadlets/layout/1.0.0 http://www.mymita.com/xsd/vaadlets-layout-1.0.0.xsd
                               http://www.mymita.com/vaadlets/ui/1.0.0 http://www.mymita.com/xsd/vaadlets-ui-1.0.0.xsd
-                              http://www.mymita.com/vaadlets/input/1.0.0 http://www.mymita.com/xsd/vaadlets-input-1.0.0.xsd">
+                              http://www.mymita.com/vaadlets/input/1.0.0 http://www.mymita.com/xsd/vaadlets-input-1.0.0.xsd
+                              http://www.mymita.com/vaadlets/addon/1.0.0 http://www.mymita.com/xsd/vaadlets-addon-1.0.0.xsd">
   <ui:window caption="Vaadlets Editor">
+    <ui:window caption="Welcome" width="300px" height="200px" center="true" resizeable="false" modal="true">
+      <ui:label caption="Welcome to the Vaadlets DEMO Application"/>
+    </ui:window>
     <ui:horizontalSplitPanel>
-      <layout:verticalLayout size-full="true">
-        <input:textField id="editor" size-full="true" expand-ratio="1.0"/>
+      <layout:verticalLayout size-full="true" margin="true" spacing="true">
+        <ui:panel size-full="true" expand-ratio="1.0">
+          <layout:verticalLayout size-full="true" >
+            <addon:codeMirror id="editor" size-full="true" expand-ratio="1.0" code-style="XML" style-name="foobar"/>
+          </layout:verticalLayout>
+        </ui:panel>
         <layout:horizontalLayout>
           <input:button id="test" caption="Test Vaadlet"/>
           <input:button id="reset" caption="Reset Vaadlet"/>
         </layout:horizontalLayout>
       </layout:verticalLayout>
-      <ui:panel id="content"/>
+      <ui:panel id="content" size-full="true">
+        <layout:verticalLayout margin="true"/>
+      </ui:panel>
     </ui:horizontalSplitPanel>
   </ui:window>
 

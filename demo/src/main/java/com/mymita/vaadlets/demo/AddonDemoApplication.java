@@ -6,15 +6,16 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import com.google.common.io.CharStreams;
-import com.mymita.vaadlets.addon.VaadletsBuilder;
+import com.mymita.vaadlets.VaadletsBuilder;
 import com.vaadin.Application;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
@@ -22,6 +23,8 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 public class AddonDemoApplication extends Application {
+
+  private static final Log LOG = LogFactory.getLog(AddonDemoApplication.class);
 
   private static final long serialVersionUID = 4745768698981212574L;
 
@@ -35,11 +38,8 @@ public class AddonDemoApplication extends Application {
     return vl;
   }
 
-  private VaadletsBuilder vaadlets;
-
-  private void fillEditorWithDefaultXML() {
-    final Panel content = vaadlets.getComponent("content");
-    content.removeAllComponents();
+  private static void fillEditorWithDefaultXML(final VaadletsBuilder vaadlets) {
+    vaadlets.<Panel>getComponent("content").getContent().removeAllComponents();
     final TextField editor = vaadlets.getComponent("editor");
     try {
       editor.setValue(CharStreams.toString(new InputStreamReader(new ClassPathResource("startingPoint.xml",
@@ -50,10 +50,11 @@ public class AddonDemoApplication extends Application {
 
   @Override
   public void init() {
-    vaadlets = new VaadletsBuilder();
+    final VaadletsBuilder vaadlets = new VaadletsBuilder();
     try {
       vaadlets.build(new ClassPathResource("demo.xml", AddonDemoApplication.class).getInputStream());
-    } catch (final IOException e1) {
+    } catch (final IOException e) {
+      LOG.error("error", e);
     }
     final Window root = (Window) vaadlets.getRoot();
     setMainWindow(root);
@@ -65,17 +66,18 @@ public class AddonDemoApplication extends Application {
       public void buttonClick(final ClickEvent event) {
         final Panel content = vaadlets.getComponent("content");
         final TextField editor = vaadlets.getComponent("editor");
-        content.removeAllComponents();
+        content.getContent().removeAllComponents();
         try {
           final VaadletsBuilder v = new VaadletsBuilder();
           v.build(new ByteArrayInputStream(editor.toString().getBytes()));
-          final Component root = v.getRoot();
-          if (root instanceof Window) {
-            getMainWindow().addWindow((Window) root);
+          if (v.getRoot() instanceof Window) {
+            final Window w = (Window) v.getRoot();
+            root.addWindow(w);
           } else {
-            content.addComponent(root);
+            content.getContent().addComponent(v.getRoot());
           }
         } catch (final Exception e) {
+          LOG.error("error", e);
           content.addComponent(createStackTraceLabel(e));
         }
       }
@@ -85,10 +87,9 @@ public class AddonDemoApplication extends Application {
 
       @Override
       public void buttonClick(final ClickEvent event) {
-        fillEditorWithDefaultXML();
+        fillEditorWithDefaultXML(vaadlets);
       }
     });
-
-    fillEditorWithDefaultXML();
+    fillEditorWithDefaultXML(vaadlets);
   }
 }

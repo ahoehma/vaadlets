@@ -56,6 +56,13 @@
       <version>1.2.13</version>
       <scope>test</scope>
     </dependency>
+
+    <dependency>
+      <groupId>org.vaadin.addons</groupId>
+      <artifactId>codemirror</artifactId>
+      <version>0.9.3</version>
+    </dependency>
+
   </dependencies>
 
   <build>

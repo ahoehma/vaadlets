@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:vaadlets="http://www.mymita.com/vaadlets/1.0.0"
         xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
         targetNamespace="http://www.mymita.com/vaadlets/core/1.0.0"
         xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
         xmlns:ui="http://www.mymita.com/vaadlets/ui/1.0.0"
         elementFormDefault="qualified" version="1.0" xml:lang="en">
+  <import namespace="http://www.mymita.com/vaadlets/1.0.0" schemaLocation="vaadlets-1.0.0.xsd"/>
   <import namespace="http://www.mymita.com/vaadlets/layout/1.0.0" schemaLocation="vaadlets-layout-1.0.0.xsd"/>
   <import namespace="http://www.mymita.com/vaadlets/ui/1.0.0" schemaLocation="vaadlets-ui-1.0.0.xsd"/>
   <element name="include">
@@ -15,7 +17,7 @@
   <element name="repeat">
     <complexType mixed="true">
       <choice minOccurs="0" maxOccurs="unbounded">
-        <group ref="ui:components" />
+        <group ref="vaadlets:components" />
       </choice>
       <attribute name="value" use="required"/>
       <attribute name="var" use="required"/>
@@ -27,18 +29,32 @@
     <attribute name="visible" type="boolean" default="true"/>
     <attribute name="readonly" type="boolean" default="false"/>
     <attribute name="caption" type="string" />
-    <attribute name="style-name" type="string" />
+    <attributeGroup ref="core:styleAttributes"/>
+    <attributeGroup ref="core:sizeAttributes"/>
+    <attributeGroup ref="core:layoutAttributes"/>
+  </complexType>
+  <attributeGroup name="layoutAttributes">
+    <attribute name="column" type="short"/>
+    <attribute name="row" type="short"/>
+    <attribute name="column2" type="short"/>
+    <attribute name="row2" type="short"/>
+    <attribute name="alignment" type="layout:alignment"/>
+    <attribute name="expand-ratio" type="float"/>
+  </attributeGroup>
+  <attributeGroup name="sizeAttributes">
     <attribute name="width" type="string"/>
     <attribute name="height" type="string"/>
     <attribute name="size-full" type="boolean"/>
     <attribute name="size-undefined" type="boolean"/>
-    <attributeGroup ref="layout:layoutableComponentAttributes"/>
-  </complexType>
+  </attributeGroup>
+  <attributeGroup name="styleAttributes">
+    <attribute name="style-name" type="string" />
+  </attributeGroup>
   <complexType name="componentContainer" abstract="true">
     <complexContent>
       <extension base="core:component">
         <choice minOccurs="0" maxOccurs="unbounded">
-          <group ref="ui:components" />
+          <group ref="vaadlets:components" />
         </choice>
       </extension>
     </complexContent>

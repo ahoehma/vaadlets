@@ -6,9 +6,11 @@
   <system systemId="http://www.mymita.com/xsd/vaadlets-layout-1.0.0.xsd" uri="com/mymita/vaadlets/xsd/vaadlets-layout-1.0.0.xsd" />
   <system systemId="http://www.mymita.com/xsd/vaadlets-ui-1.0.0.xsd" uri="com/mymita/vaadlets/xsd/vaadlets-ui-1.0.0.xsd" />
   <system systemId="http://www.mymita.com/xsd/vaadlets-input-1.0.0.xsd" uri="com/mymita/vaadlets/xsd/vaadlets-input-1.0.0.xsd" />
+  <system systemId="http://www.mymita.com/xsd/vaadlets-addon-1.0.0.xsd" uri="com/mymita/vaadlets/xsd/vaadlets-addon-1.0.0.xsd" />
   <public publicId="http://www.mymita.com/vaadlets/1.0.0" uri="com/mymita/vaadlets/xsd/vaadlets-1.0.0.xsd" />
   <public publicId="http://www.mymita.com/vaadlets/core/1.0.0" uri="com/mymita/vaadlets/xsd/vaadlets-core-1.0.0.xsd" />
   <public publicId="http://www.mymita.com/vaadlets/layout/1.0.0" uri="com/mymita/vaadlets/xsd/vaadlets-layout-1.0.0.xsd" />
   <public publicId="http://www.mymita.com/vaadlets/ui/1.0.0" uri="com/mymita/vaadlets/xsd/vaadlets-ui-1.0.0.xsd" />
   <public publicId="http://www.mymita.com/vaadlets/input/1.0.0" uri="com/mymita/vaadlets/xsd/vaadlets-input-1.0.0.xsd" />
+  <public publicId="http://www.mymita.com/vaadlets/addon/1.0.0" uri="com/mymita/vaadlets/xsd/vaadlets-addon-1.0.0.xsd" />
 </catalog>

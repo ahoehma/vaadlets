@@ -1,4 +1,4 @@
-package com.mymita.vaadlets.addon;
+package com.mymita.vaadlets;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang3.ClassUtils.getPackageCanonicalName;
@@ -58,6 +58,7 @@ public final class JAXBUtils {
         getPackageCanonicalName(com.mymita.vaadlets.layout.ObjectFactory.class),
         getPackageCanonicalName(com.mymita.vaadlets.ui.ObjectFactory.class),
         getPackageCanonicalName(com.mymita.vaadlets.input.ObjectFactory.class),
+        getPackageCanonicalName(com.mymita.vaadlets.addon.ObjectFactory.class),
       });
 
   private static final Map<String, ClassPathResource> SCHEMAS = ImmutableMap
@@ -70,7 +71,9 @@ public final class JAXBUtils {
       .put("http://www.mymita.com/vaadlets/ui/1.0.0",
           new ClassPathResource("com/mymita/vaadlets/xsd/vaadlets-ui-1.0.0.xsd"))
       .put("http://www.mymita.com/vaadlets/input/1.0.0",
-          new ClassPathResource("com/mymita/vaadlets/xsd/vaadlets-input-1.0.0.xsd")).build();
+          new ClassPathResource("com/mymita/vaadlets/xsd/vaadlets-input-1.0.0.xsd"))
+      .put("http://www.mymita.com/vaadlets/addon/1.0.0",
+          new ClassPathResource("com/mymita/vaadlets/xsd/vaadlets-addon-1.0.0.xsd")).build();
 
   public static final Vaadlets unmarshal(final InputStream inputStream) {
     return unmarshal(inputStream, true);

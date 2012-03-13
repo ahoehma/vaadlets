@@ -33,4 +33,9 @@
       <jaxb:package name="com.mymita.vaadlets.input"/>
     </jaxb:schemaBindings>
   </jaxb:bindings>
+  <jaxb:bindings schemaLocation="vaadlets-addon-1.0.0.xsd"  node="/xsd:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="com.mymita.vaadlets.addon"/>
+    </jaxb:schemaBindings>
+  </jaxb:bindings>
 </jaxb:bindings>

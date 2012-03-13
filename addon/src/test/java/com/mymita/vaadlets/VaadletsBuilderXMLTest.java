@@ -1,12 +1,10 @@
-package com.mymita.vaadlets.addon;
+package com.mymita.vaadlets;
 
 import java.io.IOException;
 
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
-import com.mymita.vaadlets.Vaadlets;
 
 /**
  * @author Andreas Höhmann
@@ -32,6 +30,16 @@ public class VaadletsBuilderXMLTest {
 
   @DataProvider(name = "valid-xml-files")
   private Object[][] validXMLFiles() {
-    return new Object[][] { { "vaadlets-1.xml" }, { "vaadlets-2.xml" }, { "vaadlets-3.xml" }, };
+    return new Object[][] {
+      {
+        "vaadlets-1.xml"
+      }, {
+        "vaadlets-2.xml"
+      }, {
+        "vaadlets-3.xml"
+      }, {
+        "vaadlets-4.xml"
+      },
+    };
   }
 }

@@ -2,9 +2,11 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:ui="http://www.mymita.com/vaadlets/ui/1.0.0"
         targetNamespace="http://www.mymita.com/vaadlets/ui/1.0.0"
+        xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
         xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
         xmlns:input="http://www.mymita.com/vaadlets/input/1.0.0"
         elementFormDefault="qualified" version="1.0" xml:lang="en">
+  <import namespace="http://www.mymita.com/vaadlets/core/1.0.0" schemaLocation="vaadlets-core-1.0.0.xsd"/>
   <import namespace="http://www.mymita.com/vaadlets/layout/1.0.0" schemaLocation="vaadlets-layout-1.0.0.xsd"/>
   <import namespace="http://www.mymita.com/vaadlets/input/1.0.0" schemaLocation="vaadlets-input-1.0.0.xsd"/>
   <simpleType name="contentMode">
@@ -18,7 +20,7 @@
   </simpleType>
   <complexType name="panel">
     <complexContent>
-      <extension base="layout:layoutableComponent">
+      <extension base="core:componentContainer">
         <attribute name="scrollable" type="boolean" default="false"/>
       </extension>
     </complexContent>
@@ -43,10 +45,17 @@
       </extension>
     </complexContent>
   </complexType>
+  <simpleType name="windowBorder">
+    <restriction base="string">
+      <enumeration value="BORDER_NONE"/>
+      <enumeration value="BORDER_MINIMAL"/>
+      <enumeration value="BORDER_DEFAULT"/>
+    </restriction>
+  </simpleType>
   <complexType name="window">
     <complexContent>
       <extension base="ui:panel">
-        <attribute name="border" type="string"/>
+        <attribute name="border" type="ui:windowBorder" default="BORDER_DEFAULT"/>
         <attribute name="position-x" type="short"/>
         <attribute name="position-y" type="short"/>
         <attribute name="resizeable" type="boolean" default="true"/>
@@ -60,7 +69,7 @@
   </complexType>
   <complexType name="label">
     <complexContent>
-      <extension base="layout:layoutableComponent">
+      <extension base="core:component">
         <attribute name="contentMode" type="ui:contentMode" default="CONTENT_TEXT"/>
       </extension>
     </complexContent>
@@ -72,16 +81,6 @@
       <element ref="ui:horizontalSplitPanel"/>
       <element ref="ui:window"/>
       <element ref="ui:label"/>
-      <element ref="layout:gridLayout"/>
-      <element ref="layout:cssLayout"/>
-      <element ref="layout:customLayout"/>
-      <element ref="layout:formLayout"/>
-      <element ref="layout:horizontalLayout"/>
-      <element ref="layout:verticalLayout"/>
-      <element ref="input:textField"/>
-      <element ref="input:passwordField"/>
-      <element ref="input:textArea"/>
-      <element ref="input:button"/>
     </choice>
   </group>
   <element name="panel" type="ui:panel"/>

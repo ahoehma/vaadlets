@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:addon="http://www.mymita.com/vaadlets/addon/1.0.0"
+        targetNamespace="http://www.mymita.com/vaadlets/addon/1.0.0"
+        xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
+        xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
+        xmlns:input="http://www.mymita.com/vaadlets/input/1.0.0"
+        elementFormDefault="qualified" version="1.0" xml:lang="en">
+  <import namespace="http://www.mymita.com/vaadlets/core/1.0.0" schemaLocation="vaadlets-core-1.0.0.xsd"/>
+  <import namespace="http://www.mymita.com/vaadlets/layout/1.0.0" schemaLocation="vaadlets-layout-1.0.0.xsd"/>
+  <import namespace="http://www.mymita.com/vaadlets/input/1.0.0" schemaLocation="vaadlets-input-1.0.0.xsd"/>
+  <simpleType name="codeMirrorCodeStyle">
+    <restriction base="string">
+      <enumeration value="CSS"/>
+      <enumeration value="JAVA"/>
+      <enumeration value="JAVASCRIPT"/>
+      <enumeration value="LUA"/>
+      <enumeration value="PHP"/>
+      <enumeration value="PYTHON"/>
+      <enumeration value="SQL"/>
+      <enumeration value="TEXT"/>
+      <enumeration value="XML"/>
+    </restriction>
+  </simpleType>
+  <complexType name="codeMirror">
+    <complexContent>
+      <extension base="input:textField">
+        <attribute name="show-line-numbers" type="boolean" default="false"/>
+        <attribute name="code-style" type="addon:codeMirrorCodeStyle" default="TEXT"/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <group name="components">
+    <choice>
+      <element ref="addon:codeMirror"/>
+    </choice>
+  </group>
+  <element name="codeMirror" type="addon:codeMirror"/>
+</schema>

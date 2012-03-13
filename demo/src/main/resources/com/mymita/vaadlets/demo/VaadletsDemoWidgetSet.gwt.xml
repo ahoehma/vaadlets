@@ -4,4 +4,10 @@
     "http://google-web-toolkit.googlecode.com/svn/tags/2.3.0/distro-source/core/src/gwt-module.dtd">
 <module>
     <inherits name="com.vaadin.terminal.gwt.DefaultWidgetSet" />
+
+    
+
+    
+
+    <inherits name="org.vaadin.codemirror.CodemirrorWidgetset" />
 </module>

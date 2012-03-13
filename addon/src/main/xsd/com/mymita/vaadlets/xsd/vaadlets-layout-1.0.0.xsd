@@ -2,13 +2,15 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
         xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
         targetNamespace="http://www.mymita.com/vaadlets/layout/1.0.0"
+        xmlns:vaadlets="http://www.mymita.com/vaadlets/1.0.0"
         xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
         elementFormDefault="qualified" version="1.0" xml:lang="en">
+  <import namespace="http://www.mymita.com/vaadlets/1.0.0" schemaLocation="vaadlets-1.0.0.xsd"/>
   <import namespace="http://www.mymita.com/vaadlets/core/1.0.0" schemaLocation="vaadlets-core-1.0.0.xsd"/>
   <complexType name="abstractLayout" abstract="true">
     <complexContent>
       <extension base="core:componentContainer">
-        <attribute name="margin" type="boolean" />
+        <attribute name="margin" type="boolean"/>
         <attribute name="margin-top" type="boolean" />
         <attribute name="margin-right" type="boolean" />
         <attribute name="margin-bottom" type="boolean" />
@@ -19,7 +21,7 @@
   <complexType name="orderedLayout" abstract="true">
     <complexContent>
       <extension base="layout:abstractLayout">
-        <attribute name="spacing" type="boolean" />
+        <attribute name="spacing" type="boolean"/>
       </extension>
     </complexContent>
   </complexType>
@@ -54,9 +56,21 @@
       </extension>
     </complexContent>
   </complexType>
+  <complexType name="gridLayoutColumExpandRatio">
+    <attribute name="columnIndex" type="short" use="required"/>
+    <attribute name="ratio" type="float" use="required"/>
+  </complexType>
+  <complexType name="gridLayoutRowExpandRatio">
+    <attribute name="rowIndex" type="short" use="required"/>
+    <attribute name="ratio" type="float" use="required"/>
+  </complexType>
   <complexType name="gridLayout">
     <complexContent>
       <extension base="layout:abstractLayout">
+        <choice minOccurs="0" maxOccurs="unbounded">
+          <element name="columnExpandRatio" type="layout:gridLayoutColumExpandRatio"/>
+          <element name="rowExpandRatio" type="layout:gridLayoutRowExpandRatio"/>
+        </choice>
         <attribute name="columns" type="short" default="1"/>
         <attribute name="rows" type="short" default="1"/>
       </extension>
@@ -75,20 +89,22 @@
       <enumeration value="bottom_right"/>
     </restriction>
   </simpleType>
-  <attributeGroup name="layoutableComponentAttributes">
-    <attribute name="column" type="short"/>
-    <attribute name="row" type="short"/>
-    <attribute name="column2" type="short"/>
-    <attribute name="row2" type="short"/>
-    <attribute name="alignment" type="layout:alignment"/>
-    <attribute name="expand-ratio" type="float"/>
-  </attributeGroup>
   <complexType name="layoutableComponent" abstract="true">
     <complexContent>
       <extension base="core:componentContainer">
       </extension>
     </complexContent>
   </complexType>
+  <group name="components">
+    <choice>
+      <element ref="layout:gridLayout"/>
+      <element ref="layout:cssLayout"/>
+      <element ref="layout:customLayout"/>
+      <element ref="layout:formLayout"/>
+      <element ref="layout:horizontalLayout"/>
+      <element ref="layout:verticalLayout"/>
+    </choice>
+  </group>
   <element name="verticalLayout" type="layout:verticalLayout"/>
   <element name="horizontalLayout" type="layout:horizontalLayout"/>
   <element name="formLayout" type="layout:formLayout"/>

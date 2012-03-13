@@ -64,6 +64,14 @@
       </extension>
     </complexContent>
   </complexType>
+  <group name="components">
+    <choice>
+      <element ref="input:textField"/>
+      <element ref="input:passwordField"/>
+      <element ref="input:textArea"/>
+      <element ref="input:button"/>
+    </choice>
+  </group>
   <element name="textField" type="input:textField"/>
   <element name="passwordField" type="input:passwordField"/>
   <element name="textArea" type="input:textArea"/>

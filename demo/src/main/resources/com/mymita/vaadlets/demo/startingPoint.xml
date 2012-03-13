@@ -10,33 +10,36 @@
                               http://www.mymita.com/vaadlets/layout/1.0.0 http://www.mymita.com/xsd/vaadlets-layout-1.0.0.xsd
                               http://www.mymita.com/vaadlets/ui/1.0.0 http://www.mymita.com/xsd/vaadlets-ui-1.0.0.xsd
                               http://www.mymita.com/vaadlets/input/1.0.0 http://www.mymita.com/xsd/vaadlets-input-1.0.0.xsd">
-  <layout:verticalLayout size-full="true">
-    <layout:gridLayout columns="3" rows="5" expand-ratio="1.0" alignment="top_left" size-full="true">
-      <layout:rowExpandRatio ratio="2" rowIndex="0"/>
-      <ui:label caption="Label at grid position 0,0" column="0" row="0"/>
-      <ui:label caption="Label at grid position 1,0" column="1" row="0"/>
-      <layout:horizontalLayout column="0" row="1" column2="2" row2="1" width="100%" height="100%">
-        <ui:panel caption="panel left" alignment="middle_left" width="100%" height="100%">
-          <layout:formLayout width="100%" height="100%">
-            <ui:label caption="form label left"></ui:label>
-          </layout:formLayout>
-        </ui:panel>
-        <ui:panel caption="panel right" alignment="middle_right" width="100%" height="100%" scrollable="false">
-          <layout:formLayout width="100%" height="100%">
-            <ui:label caption="form label right"></ui:label>
-          </layout:formLayout>
-        </ui:panel>
-      </layout:horizontalLayout>
-      <ui:horizontalSplitPanel split-position="30%" column="0" row="2" column2="2" row2="3" locked="true">
-        <layout:cssLayout>
-          <ui:label caption="split panel left" width="100%"/>
+  <layout:gridLayout columns="3" rows="5" size-full="true" spacing="true">
+    <ui:label caption="Label at grid position 0,0" column="0" row="0"/>
+    <ui:label caption="Label at grid position 1,0" column="1" row="0"/>
+    <ui:label caption="Label at grid position 2,0" column="2" row="0"/>
+    <layout:horizontalLayout column="0" row="1" column2="2" row2="1" size-full="true">
+      <ui:panel caption="panel left" alignment="middle_left" size-full="true">
+        <layout:formLayout width="100%" height="100%">
+          <ui:label caption="form label left"/>
+          <input:textField caption="name"/>
+          <input:textField caption="street"/>
+          <input:textField caption="city"/>
+        </layout:formLayout>
+      </ui:panel>
+      <ui:panel caption="panel right" alignment="middle_right" size-full="true" scrollable="false">
+        <layout:cssLayout width="100%" height="100%">
+          <ui:label caption="form label right"/>
         </layout:cssLayout>
-        <ui:panel size-full="true">
-          <ui:label caption="split panel right"/>
-        </ui:panel>
-      </ui:horizontalSplitPanel>
-      <input:button caption="Click ME!!!!" column="0" row="4"/>
-      <input:button caption="HTML" column="1" row="4" value="sdfsdfsdfsfds"/>
-    </layout:gridLayout>
-  </layout:verticalLayout>
+      </ui:panel>
+    </layout:horizontalLayout>
+    <ui:horizontalSplitPanel split-position="30%" size-full="true" row="2" row2="2" column="0" column2="2">
+      <ui:panel size-full="true">
+        <ui:label caption="split panel left"/>
+      </ui:panel>
+      <ui:panel size-full="true">
+        <ui:label caption="split panel right"/>
+      </ui:panel>
+    </ui:horizontalSplitPanel>
+    <input:button caption="Click ME!!!!" column="0" row="4"/>
+    <input:button caption="HTML" column="1" row="4" value="sdfsdfsdfsfds"/>
+    <layout:rowExpandRatio ratio="1.0" rowIndex="1"/>
+    <layout:rowExpandRatio ratio="1.0" rowIndex="2"/>
+  </layout:gridLayout>
 </vaadlets>

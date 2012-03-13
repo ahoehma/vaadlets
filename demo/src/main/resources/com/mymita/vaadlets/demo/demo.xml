@@ -29,7 +29,7 @@
         </layout:horizontalLayout>
       </layout:verticalLayout>
       <ui:panel id="content" size-full="true">
-        <layout:verticalLayout margin="true"/>
+        <layout:verticalLayout margin="true" size-full="true"/>
       </ui:panel>
     </ui:horizontalSplitPanel>
   </ui:window>

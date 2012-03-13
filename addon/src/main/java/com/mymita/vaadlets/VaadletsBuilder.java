@@ -33,9 +33,6 @@ public class VaadletsBuilder {
 
   private static final Pattern sizePattern = Pattern.compile("^(-?\\d+(\\.\\d+)?)(%|px|em|ex|in|cm|mm|pt|pc)?$");
 
-  private final BiMap<String, com.vaadin.ui.Component> components = HashBiMap.create();
-  private com.vaadin.ui.ComponentContainer root;
-
   private static void addComponent(final com.vaadin.ui.Component vaadinParent,
       final com.mymita.vaadlets.core.Component vaadletParent, final com.vaadin.ui.Component vaadinComponent,
       final com.mymita.vaadlets.core.Component vaadletComponent) {
@@ -244,6 +241,10 @@ public class VaadletsBuilder {
           vaadinGridLayout.setRowExpandRatio(rr.getRowIndex(), rr.getRatio());
         }
       }
+      final Boolean spacing = ((com.mymita.vaadlets.layout.GridLayout) vaadletsComponent).isSpacing();
+      if (spacing != null) {
+        ((com.vaadin.ui.GridLayout) vaadinComponent).setSpacing(spacing);
+      }
     }
   }
 
@@ -288,6 +289,10 @@ public class VaadletsBuilder {
     }
   }
 
+  private final BiMap<String, com.vaadin.ui.Component> components = HashBiMap.create();
+
+  private com.vaadin.ui.ComponentContainer root;
+
   public void build(final InputStream inputStream) {
     final com.mymita.vaadlets.core.Component r = JAXBUtils.unmarshal(inputStream).getRootComponent();
     if (!(r instanceof com.mymita.vaadlets.core.ComponentContainer)) {
@@ -300,14 +305,6 @@ public class VaadletsBuilder {
       root = (com.vaadin.ui.ComponentContainer) createVaadinComponent(r);
       createChildComponents(root, (com.mymita.vaadlets.core.ComponentContainer) r);
     }
-  }
-
-  public <T extends Component> T getComponent(final String id) {
-    return (T) components.get(id);
-  }
-
-  public Component getRoot() {
-    return root;
   }
 
   private void createChildComponents(final com.vaadin.ui.Component vaadinParentComponent,
@@ -358,5 +355,13 @@ public class VaadletsBuilder {
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
       throw new RuntimeException(format("Can't find vaadin class for '%s'", c), e);
     }
+  }
+
+  public <T extends Component> T getComponent(final String id) {
+    return (T) components.get(id);
+  }
+
+  public Component getRoot() {
+    return root;
   }
 }

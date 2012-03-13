@@ -71,6 +71,7 @@
           <element name="columnExpandRatio" type="layout:gridLayoutColumExpandRatio"/>
           <element name="rowExpandRatio" type="layout:gridLayoutRowExpandRatio"/>
         </choice>
+        <attribute name="spacing" type="boolean"/>
         <attribute name="columns" type="short" default="1"/>
         <attribute name="rows" type="short" default="1"/>
       </extension>

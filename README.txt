@@ -1,45 +1,56 @@
-vaadlets README
-=================================================
+# Vaadlets
 
-PREREQUISITES
+Vaadlets is a template engine for vaadin. 
 
-  - Java 7
-  - Maven 3
-  - A working internet connection
+Imagine you can use a library like Facelets (Java Server Faces) in your Vaadin application. 
 
-CHECKING OUT THE CODE
+The declaration of a Vaadlets template is xsd based, so you have auto completion etc.
 
-  The source code is maintained at github. To check
-  out the latest development version, use the following command:
+Please see the examples below.     
 
-    $ git clone https://github.com/ahoehma/vaadlets
+# Building from Source
 
-EDITING THE CODE IN AN IDE
+## Prerequisites
 
-  The vaadlets add-on project can be imported in any IDE that supports Maven.
-  The Eclipse will be the default IDE. 
+* Java 7
+* Maven 3
+* Git
+* Eclipse (m2eclipse, egit)
+* A working internet connection
 
-TRYING OUT THE DEMO
+## Checking out the code
 
-  1. Compile and install the entire project:
+Clone the git repository using the URL on the Github home page:
+
+    $ git clone git@github.com:ahoehma/vaadlets.git
+    $ cd vaadlets
+
+## Build on command line
 
     $ mvn install
 
-  2. Start the built-in Jetty web server:
+## Editing the code in an IDE
 
-    $ cd demo
-    $ mvn jetty:run
+I'm using eclipse with the power of m2eclipse (maven integration). Simply import the projects. That's it ;)   
 
-  3. Open your favorite web browser and point it to:
+# Trying out the demo
 
-    http://localhost:8080/vaadlets-demo/
+  $ cd vaadlets-demo
+  $ mvn jetty:run
+  open browser http://localhost:8080/vaadlets-demo/
 
-READING THE MANUAL
+# Using Vaadlets in your project
 
-  1. Generate the manual:
+Simply add the following dependency to your Maven project:
 
-    $ cd manual
-    $ mvn docbkx:generate-html
+    <dependency>
+        <groupId>com.mymita</groupId>
+        <artifactId>vaadlets-addon</artifactId>
+        <version>0.0.1</version>
+    </dependency>
 
-  2. Open the file manual/target/docbkx/html/manual.html
-     in your favorite web browser.
+# Release notes
+
+## 0.1
+
+* Initial release - in progress

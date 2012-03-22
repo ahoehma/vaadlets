@@ -1,4 +1,5 @@
-# Vaadlets
+Vaadlets
+========
 
 Vaadlets is a template engine for vaadin. 
 
@@ -8,9 +9,10 @@ The declaration of a Vaadlets template is xsd based, so you have auto completion
 
 Please see the examples below.     
 
-# Building from Source
+Building from Source
+--------------------
 
-## Prerequisites
+### Prerequisites
 
 * Java 7
 * Maven 3
@@ -18,28 +20,31 @@ Please see the examples below.
 * Eclipse (m2eclipse, egit)
 * A working internet connection
 
-## Checking out the code
+### Checking out the code
 
 Clone the git repository using the URL on the Github home page:
 
     $ git clone git@github.com:ahoehma/vaadlets.git
     $ cd vaadlets
 
-## Build on command line
+### Build on command line
 
     $ mvn install
 
-## Editing the code in an IDE
+Editing the code in an IDE
+--------------------------
 
 I'm using eclipse with the power of m2eclipse (maven integration). Simply import the projects. That's it ;)   
 
-# Trying out the demo
+Trying out the demo
+-------------------
 
   $ cd vaadlets-demo
   $ mvn jetty:run
   open browser http://localhost:8080/vaadlets-demo/
 
-# Using Vaadlets in your project
+Using Vaadlets in your project
+------------------------------
 
 Simply add the following dependency to your Maven project:
 
@@ -49,8 +54,9 @@ Simply add the following dependency to your Maven project:
         <version>0.0.1</version>
     </dependency>
 
-# Release notes
+Release notes
+-------------
 
-## 0.1
+### 0.1
 
 * Initial release - in progress

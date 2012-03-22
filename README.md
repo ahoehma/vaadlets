@@ -62,6 +62,7 @@ Examples
 
 Vaadlet template:
 
+```xml
     <?xml version="1.0" encoding="UTF-8"?>
     <vaadlets xmlns="http://www.mymita.com/vaadlets/1.0.0"
               xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
@@ -98,9 +99,11 @@ Vaadlet template:
         </ui:horizontalSplitPanel>
       </ui:window>
     </vaadlets>
+```    
     
 Vaadin application:
-        
+   
+```java
     package com.mymita.vaadlets.demo;
 
     import java.io.ByteArrayInputStream;
@@ -196,6 +199,7 @@ Vaadin application:
         fillEditorWithDefaultXML(vaadlets);
       }
     }
+```
 
 Release notes
 -------------

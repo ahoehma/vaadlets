@@ -74,7 +74,6 @@ Examples
                                 http://www.mymita.com/vaadlets/ui/1.0.0 http://www.mymita.com/xsd/vaadlets-ui-1.0.0.xsd
                                 http://www.mymita.com/vaadlets/input/1.0.0 http://www.mymita.com/xsd/vaadlets-input-1.0.0.xsd
                                 http://www.mymita.com/vaadlets/addon/1.0.0 http://www.mymita.com/xsd/vaadlets-addon-1.0.0.xsd">
-    
     <ui:window caption="Vaadlets Editor">
       <ui:window caption="Welcome" width="300px" height="200px" center="true" resizeable="false" modal="true">
         <ui:label caption="Welcome to the Vaadlets DEMO Application"/>
@@ -96,7 +95,6 @@ Examples
         </ui:panel>
       </ui:horizontalSplitPanel>
     </ui:window>
-  
   </vaadlets>
 
 Release notes

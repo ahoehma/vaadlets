@@ -4,7 +4,7 @@
         targetNamespace="http://www.mymita.com/vaadlets/layout/1.0.0"
         xmlns:vaadlets="http://www.mymita.com/vaadlets/1.0.0"
         xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
-        elementFormDefault="qualified" version="1.0" xml:lang="en">
+        elementFormDefault="qualified">
   <import namespace="http://www.mymita.com/vaadlets/1.0.0" schemaLocation="vaadlets-1.0.0.xsd"/>
   <import namespace="http://www.mymita.com/vaadlets/core/1.0.0" schemaLocation="vaadlets-core-1.0.0.xsd"/>
   <complexType name="abstractLayout" abstract="true">

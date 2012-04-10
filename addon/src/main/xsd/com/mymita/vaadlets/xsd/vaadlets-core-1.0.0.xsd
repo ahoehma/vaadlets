@@ -5,7 +5,7 @@
         targetNamespace="http://www.mymita.com/vaadlets/core/1.0.0"
         xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
         xmlns:ui="http://www.mymita.com/vaadlets/ui/1.0.0"
-        elementFormDefault="qualified" version="1.0" xml:lang="en">
+        elementFormDefault="qualified">
   <import namespace="http://www.mymita.com/vaadlets/1.0.0" schemaLocation="vaadlets-1.0.0.xsd"/>
   <import namespace="http://www.mymita.com/vaadlets/layout/1.0.0" schemaLocation="vaadlets-layout-1.0.0.xsd"/>
   <import namespace="http://www.mymita.com/vaadlets/ui/1.0.0" schemaLocation="vaadlets-ui-1.0.0.xsd"/>

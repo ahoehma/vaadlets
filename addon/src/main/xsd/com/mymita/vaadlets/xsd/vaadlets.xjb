@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
                xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-               jaxb:version="1.0">
+               jaxb:version="2.1">
   <jaxb:bindings schemaLocation="vaadlets-1.0.0.xsd"  node="/xsd:schema">
     <jaxb:schemaBindings>
       <jaxb:package name="com.mymita.vaadlets"/>

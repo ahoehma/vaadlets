@@ -1,10 +1,40 @@
+/*******************************************************************************
+ * Copyright 2012 Andreas Höhmann (mymita.com)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+/**
+ * Copyright 2012 Andreas Höhmann (mymita.com)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ */
 package com.mymita.vaadlets;
 
 import static java.lang.String.format;
 import static org.apache.commons.lang3.ClassUtils.getPackageCanonicalName;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 import java.util.Map;
 
 import javax.xml.XMLConstants;
@@ -27,7 +57,6 @@ import org.xml.sax.SAXException;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
-import com.mymita.vaadlets.Vaadlets;
 
 public final class JAXBUtils {
 
@@ -75,16 +104,16 @@ public final class JAXBUtils {
       .put("http://www.mymita.com/vaadlets/addon/1.0.0",
           new ClassPathResource("com/mymita/vaadlets/xsd/vaadlets-addon-1.0.0.xsd")).build();
 
-  public static final Vaadlets unmarshal(final InputStream inputStream) {
-    return unmarshal(inputStream, true);
+  public static final Vaadlets unmarshal(final Reader aReader) {
+    return unmarshal(aReader, true);
   }
 
-  public static final Vaadlets unmarshal(final InputStream inputStream, final boolean validation) {
-    return validation ? unmarshal(inputStream, SCHEMAS.get("http://www.mymita.com/vaadlets/1.0.0")) : unmarshal(
-        inputStream, null);
+  public static final Vaadlets unmarshal(final Reader aReader, final boolean validation) {
+    return validation ? unmarshal(aReader, SCHEMAS.get("http://www.mymita.com/vaadlets/1.0.0")) : unmarshal(aReader,
+        null);
   }
 
-  private static final Vaadlets unmarshal(final InputStream inputStream, final Resource theSchemaResource) {
+  private static final Vaadlets unmarshal(final Reader aReader, final Resource theSchemaResource) {
     try {
       final JAXBContext jc = JAXBContext.newInstance(CONTEXTPATH);
       final Unmarshaller unmarshaller = jc.createUnmarshaller();
@@ -94,7 +123,7 @@ public final class JAXBUtils {
         final Schema schema = schemaFactory.newSchema(new StreamSource(theSchemaResource.getInputStream()));
         unmarshaller.setSchema(schema);
       }
-      return unmarshaller.unmarshal(XMLInputFactory.newInstance().createXMLStreamReader(inputStream), Vaadlets.class)
+      return unmarshaller.unmarshal(XMLInputFactory.newInstance().createXMLStreamReader(aReader), Vaadlets.class)
           .getValue();
     } catch (final JAXBException | SAXException | XMLStreamException | FactoryConfigurationError | IOException e) {
       throw new RuntimeException("Can't unmarschal", e);

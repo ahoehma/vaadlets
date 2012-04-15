@@ -1,6 +1,20 @@
+/*******************************************************************************
+ * Copyright 2012 Andreas Höhmann (mymita.com)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
 package com.mymita.vaadlets.demo;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -39,7 +53,7 @@ public class AddonDemoApplication extends Application {
   }
 
   private static void fillEditorWithDefaultXML(final VaadletsBuilder vaadlets) {
-    vaadlets.<Panel>getComponent("content").getContent().removeAllComponents();
+    vaadlets.<Panel> getComponent("content").getContent().removeAllComponents();
     final TextField editor = vaadlets.getComponent("editor");
     try {
       editor.setValue(CharStreams.toString(new InputStreamReader(new ClassPathResource("startingPoint.xml",
@@ -52,7 +66,8 @@ public class AddonDemoApplication extends Application {
   public void init() {
     final VaadletsBuilder vaadlets = new VaadletsBuilder();
     try {
-      vaadlets.build(new ClassPathResource("demo.xml", AddonDemoApplication.class).getInputStream());
+      vaadlets.build(new InputStreamReader(new ClassPathResource("demo.xml", AddonDemoApplication.class)
+          .getInputStream()));
     } catch (final IOException e) {
       LOG.error("error", e);
     }
@@ -69,7 +84,7 @@ public class AddonDemoApplication extends Application {
         content.getContent().removeAllComponents();
         try {
           final VaadletsBuilder v = new VaadletsBuilder();
-          v.build(new ByteArrayInputStream(editor.toString().getBytes()));
+          v.build(CharStreams.newReaderSupplier((String) editor.getValue()).getInput());
           if (v.getRoot() instanceof Window) {
             final Window w = (Window) v.getRoot();
             root.addWindow(w);

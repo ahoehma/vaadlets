@@ -1,10 +1,40 @@
+/*******************************************************************************
+ * Copyright 2012 Andreas Höhmann (mymita.com)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ ******************************************************************************/
+/**
+ * Copyright 2012 Andreas Höhmann (mymita.com)
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License. 
+ */
 package com.mymita.vaadlets;
 
 import static com.google.common.base.Objects.firstNonNull;
 import static java.lang.Boolean.FALSE;
 import static java.lang.String.format;
 
-import java.io.InputStream;
+import java.io.Reader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
@@ -181,23 +211,23 @@ public class VaadletsBuilder {
     return values;
   }
 
-  private static void setComponentAttributes(final com.vaadin.ui.Component result,
+  private static void setComponentAttributes(final com.vaadin.ui.Component vaadinComponent,
       final com.mymita.vaadlets.core.Component c) {
-    result.setCaption(c.getCaption());
-    result.setEnabled(c.isEnabled());
-    result.setReadOnly(c.isReadonly());
-    result.setVisible(c.isVisible());
+    vaadinComponent.setCaption(c.getCaption());
+    vaadinComponent.setEnabled(c.isEnabled());
+    vaadinComponent.setReadOnly(c.isReadonly());
+    vaadinComponent.setVisible(c.isVisible());
     if (c.getHeight() != null) {
-      result.setHeight(c.getHeight());
+      vaadinComponent.setHeight(c.getHeight());
     }
     if (c.getWidth() != null) {
-      result.setWidth(c.getWidth());
+      vaadinComponent.setWidth(c.getWidth());
     }
     if (c.isSizeUndefined() != null && c.isSizeUndefined().booleanValue()) {
-      result.setSizeUndefined();
+      vaadinComponent.setSizeUndefined();
     }
     if (c.isSizeFull() != null && c.isSizeFull().booleanValue()) {
-      result.setSizeFull();
+      vaadinComponent.setSizeFull();
     }
   }
 
@@ -248,19 +278,23 @@ public class VaadletsBuilder {
     }
   }
 
-  private static void setPanelAttributes(final Component result, final com.mymita.vaadlets.core.Component c) {
-    if (c instanceof com.mymita.vaadlets.ui.Panel) {
-      ((com.vaadin.ui.Panel) result).setScrollable(((com.mymita.vaadlets.ui.Panel) c).isScrollable());
+  private static void setPanelAttributes(final Component vaadinComponent,
+      final com.mymita.vaadlets.core.Component vaadletsComponent) {
+    if (vaadletsComponent instanceof com.mymita.vaadlets.ui.Panel) {
+      ((com.vaadin.ui.Panel) vaadinComponent).setScrollable(((com.mymita.vaadlets.ui.Panel) vaadletsComponent)
+          .isScrollable());
     }
   }
 
-  private static void setSplitPanelAttributes(final Component result, final com.mymita.vaadlets.core.Component c) {
+  private static void setSplitPanelAttributes(final Component vaadinComponent,
+      final com.mymita.vaadlets.core.Component c) {
     if (c instanceof com.mymita.vaadlets.ui.AbstractSplitPanel) {
       final String splitPosition = ((com.mymita.vaadlets.ui.AbstractSplitPanel) c).getSplitPosition();
       final int pos = (int) parseStringSize(splitPosition)[0];
       final int unit = (int) parseStringSize(splitPosition)[1];
-      ((com.vaadin.ui.AbstractSplitPanel) result).setSplitPosition(pos, unit);
-      ((com.vaadin.ui.AbstractSplitPanel) result).setLocked(((com.mymita.vaadlets.ui.AbstractSplitPanel) c).isLocked());
+      ((com.vaadin.ui.AbstractSplitPanel) vaadinComponent).setSplitPosition(pos, unit);
+      ((com.vaadin.ui.AbstractSplitPanel) vaadinComponent).setLocked(((com.mymita.vaadlets.ui.AbstractSplitPanel) c)
+          .isLocked());
     }
   }
 
@@ -290,11 +324,10 @@ public class VaadletsBuilder {
   }
 
   private final BiMap<String, com.vaadin.ui.Component> components = HashBiMap.create();
+  private com.vaadin.ui.Component root;
 
-  private com.vaadin.ui.ComponentContainer root;
-
-  public void build(final InputStream inputStream) {
-    final com.mymita.vaadlets.core.Component r = JAXBUtils.unmarshal(inputStream).getRootComponent();
+  public void build(final Reader aReader) {
+    final com.mymita.vaadlets.core.Component r = JAXBUtils.unmarshal(aReader).getRootComponent();
     if (!(r instanceof com.mymita.vaadlets.core.ComponentContainer)) {
       // XXX create a dummy component container
       final VerticalLayout dummy = new VerticalLayout();
@@ -302,7 +335,7 @@ public class VaadletsBuilder {
       root = new CustomComponent(dummy);
       dummy.addComponent(createVaadinComponent(r));
     } else {
-      root = (com.vaadin.ui.ComponentContainer) createVaadinComponent(r);
+      root = createVaadinComponent(r);
       createChildComponents(root, (com.mymita.vaadlets.core.ComponentContainer) r);
     }
   }
@@ -323,6 +356,7 @@ public class VaadletsBuilder {
       throws ClassNotFoundException, InstantiationException, IllegalAccessException {
     String vaadinComponentClassName = null;
     if (vaadletComponent instanceof com.mymita.vaadlets.addon.CodeMirror) {
+      // TODO build tag handler to adapt custom tags
       final com.mymita.vaadlets.addon.CodeMirror cm = (com.mymita.vaadlets.addon.CodeMirror) vaadletComponent;
       final Class<?> codeMirrorComponentClass = Class.forName("org.vaadin.codemirror.CodeMirror");
       try {
@@ -350,6 +384,7 @@ public class VaadletsBuilder {
       setSplitPanelAttributes(result, c);
       setWindowAttributes(result, c);
       setLayoutAttributes(result, c);
+      setInputAttributes(result, c);
       components.put(componentId, result);
       return result;
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
@@ -357,11 +392,21 @@ public class VaadletsBuilder {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public <T extends Component> T getComponent(final String id) {
     return (T) components.get(id);
   }
 
   public Component getRoot() {
     return root;
+  }
+
+  private void setInputAttributes(final Component vaadinComponent,
+      final com.mymita.vaadlets.core.Component vaadletsComponent) {
+    if (vaadletsComponent instanceof com.mymita.vaadlets.input.AbstractField) {
+      final com.mymita.vaadlets.input.AbstractField field = (com.mymita.vaadlets.input.AbstractField) vaadletsComponent;
+      final String value = field.getValue();
+      // TODO check for el expressions
+    }
   }
 }

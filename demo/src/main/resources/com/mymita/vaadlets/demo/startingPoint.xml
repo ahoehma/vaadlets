@@ -52,8 +52,8 @@
         <ui:label caption="split panel right"/>
       </ui:panel>
     </ui:horizontalSplitPanel>
-    <input:button caption="Click ME!!!!" column="0" row="4"/>
-    <input:button caption="HTML" column="1" row="4" value="sdfsdfsdfsfds"/>
+    <ui:button caption="Click ME!!!!" column="0" row="4"/>
+    <ui:button caption="HTML" column="1" row="4" value="sdfsdfsdfsfds"/>
     <layout:rowExpandRatio ratio="1.0" rowIndex="1"/>
     <layout:rowExpandRatio ratio="1.0" rowIndex="2"/>
   </layout:gridLayout>

@@ -13,21 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  ******************************************************************************/
-/**
- * Copyright 2012 Andreas Höhmann (mymita.com)
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License. 
- */
 package com.mymita.vaadlets;
 
 import static com.google.common.base.Objects.firstNonNull;
@@ -38,52 +23,70 @@ import java.io.Reader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vaadin.codemirror.CodeMirror;
-import org.vaadin.codemirror.client.ui.CodeStyle;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.mymita.vaadlets.addon.CodeMirrorCodeStyle;
 import com.mymita.vaadlets.layout.GridLayoutColumExpandRatio;
 import com.mymita.vaadlets.layout.GridLayoutRowExpandRatio;
-import com.vaadin.terminal.Sizeable;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.VerticalLayout;
 
+/**
+ * @author Andreas Höhmann
+ * @since 0.0.1
+ */
 public class VaadletsBuilder {
 
   private static final Log LOG = LogFactory.getLog(VaadletsBuilder.class);
 
-  private static final Pattern sizePattern = Pattern.compile("^(-?\\d+(\\.\\d+)?)(%|px|em|ex|in|cm|mm|pt|pc)?$");
-
+  /**
+   * @param vaadinParent
+   * @param vaadletParent
+   * @param vaadinComponent
+   * @param vaadletComponent
+   * @throws IllegalArgumentException
+   *           if the given <code>vaadinParent</code> is not a {@link ComponentContainer}
+   */
   private static void addComponent(final com.vaadin.ui.Component vaadinParent,
       final com.mymita.vaadlets.core.Component vaadletParent, final com.vaadin.ui.Component vaadinComponent,
-      final com.mymita.vaadlets.core.Component vaadletComponent) {
+      final com.mymita.vaadlets.core.Component vaadletComponent) throws IllegalArgumentException {
+
     LOG.debug(format("Add vaadin component '%s' (%s) to vaadin parent '%s' (%s)", vaadinComponent, vaadletComponent,
         vaadinParent, vaadletParent));
+
     if (!(vaadinParent instanceof com.vaadin.ui.ComponentContainer)) {
-      throw new RuntimeException(format(
+      throw new IllegalArgumentException(format(
           "Given vaadin parent '%s' (%s) is no ComponentContainer - can't add other components", vaadinParent,
           vaadletParent));
     }
+
     if (vaadinParent instanceof com.vaadin.ui.Window && vaadinComponent instanceof com.vaadin.ui.Window) {
       ((com.vaadin.ui.Window) vaadinParent).addWindow((com.vaadin.ui.Window) vaadinComponent);
-    } else if (vaadinParent instanceof com.vaadin.ui.Panel) {
+      return;
+    }
+
+    if (vaadinParent instanceof com.vaadin.ui.Panel) {
       if (vaadinComponent instanceof com.vaadin.ui.ComponentContainer) {
         ((com.vaadin.ui.Panel) vaadinParent).setContent((com.vaadin.ui.ComponentContainer) vaadinComponent);
       } else {
         ((com.vaadin.ui.Panel) vaadinParent).addComponent(vaadinComponent);
       }
-    } else if (vaadinParent instanceof com.vaadin.ui.Form) {
+      return;
+    }
+
+    if (vaadinParent instanceof com.vaadin.ui.Form) {
       ((com.vaadin.ui.Form) vaadinParent).setLayout((com.vaadin.ui.Layout) vaadinComponent);
-    } else if (vaadinParent instanceof com.vaadin.ui.GridLayout) {
+      return;
+    }
+
+    if (vaadinParent instanceof com.vaadin.ui.GridLayout) {
       final Short column = vaadletComponent.getColumn();
       final Short row = vaadletComponent.getRow();
       final Short column2 = vaadletComponent.getColumn2();
@@ -98,117 +101,35 @@ public class VaadletsBuilder {
       } else {
         ((com.vaadin.ui.GridLayout) vaadinParent).addComponent(vaadinComponent);
       }
-    } else if (vaadinParent instanceof com.vaadin.ui.AbstractOrderedLayout) {
+      return;
+    }
+
+    if (vaadinParent instanceof com.vaadin.ui.AbstractOrderedLayout) {
       final com.mymita.vaadlets.layout.Alignment alignment = vaadletComponent.getAlignment();
       final Float expandRatio = vaadletComponent.getExpandRatio();
       ((com.vaadin.ui.AbstractOrderedLayout) vaadinParent).addComponent(vaadinComponent);
       if (alignment != null) {
         ((com.vaadin.ui.AbstractOrderedLayout) vaadinParent).setComponentAlignment(vaadinComponent,
-            alignmentOf(alignment));
+            VaadinUtils.alignmentOf(alignment));
       }
       if (expandRatio != null) {
         ((com.vaadin.ui.AbstractOrderedLayout) vaadinParent).setExpandRatio(vaadinComponent, expandRatio);
       }
-    } else if (vaadinParent instanceof com.vaadin.ui.AbstractSplitPanel) {
+      return;
+    }
+
+    if (vaadinParent instanceof com.vaadin.ui.AbstractSplitPanel) {
       ((com.vaadin.ui.AbstractSplitPanel) vaadinParent).addComponent(vaadinComponent);
-    } else {
-      ((com.vaadin.ui.ComponentContainer) vaadinParent).addComponent(vaadinComponent);
+      return;
     }
-  }
 
-  private static com.vaadin.ui.Alignment alignmentOf(final com.mymita.vaadlets.layout.Alignment aAlignment) {
-    switch (aAlignment) {
-      case BOTTOM_LEFT:
-        return com.vaadin.ui.Alignment.BOTTOM_LEFT;
-      case BOTTOM_CENTER:
-        return com.vaadin.ui.Alignment.BOTTOM_CENTER;
-      case BOTTOM_RIGHT:
-        return com.vaadin.ui.Alignment.BOTTOM_RIGHT;
-      case MIDDLE_LEFT:
-        return com.vaadin.ui.Alignment.MIDDLE_LEFT;
-      case MIDDLE_CENTER:
-        return com.vaadin.ui.Alignment.MIDDLE_CENTER;
-      case MIDDLE_RIGHT:
-        return com.vaadin.ui.Alignment.MIDDLE_RIGHT;
-      case TOP_LEFT:
-        return com.vaadin.ui.Alignment.TOP_LEFT;
-      case TOP_CENTER:
-        return com.vaadin.ui.Alignment.TOP_CENTER;
-      case TOP_RIGHT:
-        return com.vaadin.ui.Alignment.TOP_RIGHT;
+    if (vaadinParent instanceof com.vaadin.ui.TabSheet) {
+      final int position = vaadletComponent.getTabPosition();
+      ((com.vaadin.ui.TabSheet) vaadinParent).addTab(vaadinComponent, position);
+      return;
     }
-    throw new IllegalArgumentException(String.format("Unkown aligment '%s'", aAlignment));
-  }
 
-  private static CodeStyle codeMirrorCodeStyleOf(final CodeMirrorCodeStyle codeStyle) {
-    switch (codeStyle) {
-      case CSS:
-        return org.vaadin.codemirror.client.ui.CodeStyle.CSS;
-      case JAVA:
-        return org.vaadin.codemirror.client.ui.CodeStyle.JAVA;
-      case JAVASCRIPT:
-        return org.vaadin.codemirror.client.ui.CodeStyle.JAVASCRIPT;
-      case LUA:
-        return org.vaadin.codemirror.client.ui.CodeStyle.LUA;
-      case PHP:
-        return org.vaadin.codemirror.client.ui.CodeStyle.PHP;
-      case PYTHON:
-        return org.vaadin.codemirror.client.ui.CodeStyle.PYTHON;
-      case SQL:
-        return org.vaadin.codemirror.client.ui.CodeStyle.SQL;
-      case TEXT:
-        return org.vaadin.codemirror.client.ui.CodeStyle.TEXT;
-      case XML:
-        return org.vaadin.codemirror.client.ui.CodeStyle.XML;
-    }
-    throw new IllegalArgumentException(String.format("Unkown code mirror code style '%s'", codeStyle));
-  }
-
-  private static float[] parseStringSize(String s) {
-    final float[] values = {
-      -1, Sizeable.UNITS_PIXELS
-    };
-    if (s == null) {
-      return values;
-    }
-    s = s.trim();
-    if ("".equals(s)) {
-      return values;
-    }
-    final Matcher matcher = sizePattern.matcher(s);
-    if (matcher.find()) {
-      values[0] = Float.parseFloat(matcher.group(1));
-      if (values[0] < 0) {
-        values[0] = -1;
-      } else {
-        final String unit = matcher.group(3);
-        if (unit == null) {
-          values[1] = Sizeable.UNITS_PIXELS;
-        } else if (unit.equals("px")) {
-          values[1] = Sizeable.UNITS_PIXELS;
-        } else if (unit.equals("%")) {
-          values[1] = Sizeable.UNITS_PERCENTAGE;
-        } else if (unit.equals("em")) {
-          values[1] = Sizeable.UNITS_EM;
-        } else if (unit.equals("ex")) {
-          values[1] = Sizeable.UNITS_EX;
-        } else if (unit.equals("in")) {
-          values[1] = Sizeable.UNITS_INCH;
-        } else if (unit.equals("cm")) {
-          values[1] = Sizeable.UNITS_CM;
-        } else if (unit.equals("mm")) {
-          values[1] = Sizeable.UNITS_MM;
-        } else if (unit.equals("pt")) {
-          values[1] = Sizeable.UNITS_POINTS;
-        } else if (unit.equals("pc")) {
-          values[1] = Sizeable.UNITS_PICAS;
-        }
-      }
-    } else {
-      throw new IllegalArgumentException("Invalid size argument: \"" + s + "\" (should match " + sizePattern.pattern()
-          + ")");
-    }
-    return values;
+    ((com.vaadin.ui.ComponentContainer) vaadinParent).addComponent(vaadinComponent);
   }
 
   private static void setComponentAttributes(final com.vaadin.ui.Component vaadinComponent,
@@ -290,8 +211,8 @@ public class VaadletsBuilder {
       final com.mymita.vaadlets.core.Component c) {
     if (c instanceof com.mymita.vaadlets.ui.AbstractSplitPanel) {
       final String splitPosition = ((com.mymita.vaadlets.ui.AbstractSplitPanel) c).getSplitPosition();
-      final int pos = (int) parseStringSize(splitPosition)[0];
-      final int unit = (int) parseStringSize(splitPosition)[1];
+      final int pos = (int) VaadinUtils.parseStringSize(splitPosition)[0];
+      final int unit = (int) VaadinUtils.parseStringSize(splitPosition)[1];
       ((com.vaadin.ui.AbstractSplitPanel) vaadinComponent).setSplitPosition(pos, unit);
       ((com.vaadin.ui.AbstractSplitPanel) vaadinComponent).setLocked(((com.mymita.vaadlets.ui.AbstractSplitPanel) c)
           .isLocked());
@@ -341,11 +262,12 @@ public class VaadletsBuilder {
   }
 
   private void createChildComponents(final com.vaadin.ui.Component vaadinParentComponent,
-      final com.mymita.vaadlets.core.ComponentContainer r) {
-    LOG.debug(format("Create child components to parent '%s'/'%s'", vaadinParentComponent, r));
-    for (final com.mymita.vaadlets.core.Component vaadletsComponent : r.getComponents()) {
-      final Component vaadinComponent = createVaadinComponent(vaadletsComponent);
-      addComponent(vaadinParentComponent, r, vaadinComponent, vaadletsComponent);
+      final com.mymita.vaadlets.core.ComponentContainer vaadletsComponentContainer) {
+    LOG.debug(format("Create child components for vaadin parent '%s' from vaadlets component container '%s'",
+        vaadinParentComponent, vaadletsComponentContainer));
+    for (final com.mymita.vaadlets.core.Component vaadletsComponent : vaadletsComponentContainer.getComponents()) {
+      final com.vaadin.ui.Component vaadinComponent = createVaadinComponent(vaadletsComponent);
+      addComponent(vaadinParentComponent, vaadletsComponentContainer, vaadinComponent, vaadletsComponent);
       if (vaadletsComponent instanceof com.mymita.vaadlets.core.ComponentContainer) {
         createChildComponents(vaadinComponent, (com.mymita.vaadlets.core.ComponentContainer) vaadletsComponent);
       }
@@ -362,33 +284,40 @@ public class VaadletsBuilder {
       try {
         final Constructor<?> constructor = codeMirrorComponentClass.getDeclaredConstructor(String.class);
         final CodeMirror result = (CodeMirror) constructor.newInstance(cm.getCaption());
-        result.setCodeStyle(codeMirrorCodeStyleOf(cm.getCodeStyle()));
+        result.setCodeStyle(VaadinUtils.codeMirrorCodeStyleOf(cm.getCodeStyle()));
         result.setShowLineNumbers(cm.isShowLineNumbers());
         return result;
       } catch (NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
+        throw new IllegalArgumentException(format("Can't create vaadin component for vaadlets component '%s'",
+            vaadletComponent), e);
       }
-      return null;
     }
     vaadinComponentClassName = "com.vaadin.ui." + vaadletComponent.getClass().getSimpleName();
     LOG.debug(format("Create vaadin component '%s'", vaadinComponentClassName));
-    final Class<?> vaadinComponentClass = Class.forName(vaadinComponentClassName);
-    return (com.vaadin.ui.Component) vaadinComponentClass.newInstance();
+    return (com.vaadin.ui.Component) Class.forName(vaadinComponentClassName).newInstance();
   }
 
-  private com.vaadin.ui.Component createVaadinComponent(final com.mymita.vaadlets.core.Component c) {
+  /**
+   * Build a {@link com.vaadin.ui.Component} for the given {@link com.mymita.vaadlets.core.Component}.
+   * 
+   * @param vaadletsComponent
+   * @return never <code>null</code>
+   */
+  private com.vaadin.ui.Component createVaadinComponent(final com.mymita.vaadlets.core.Component vaadletsComponent) {
     try {
-      final String componentId = Objects.firstNonNull(c.getId(), UUID.randomUUID().toString());
-      final com.vaadin.ui.Component result = createComponent(c);
-      setComponentAttributes(result, c);
-      setPanelAttributes(result, c);
-      setSplitPanelAttributes(result, c);
-      setWindowAttributes(result, c);
-      setLayoutAttributes(result, c);
-      setInputAttributes(result, c);
+      final String componentId = Objects.firstNonNull(vaadletsComponent.getId(), UUID.randomUUID().toString());
+      final com.vaadin.ui.Component result = createComponent(vaadletsComponent);
+      setComponentAttributes(result, vaadletsComponent);
+      setPanelAttributes(result, vaadletsComponent);
+      setSplitPanelAttributes(result, vaadletsComponent);
+      setWindowAttributes(result, vaadletsComponent);
+      setLayoutAttributes(result, vaadletsComponent);
+      setInputAttributes(result, vaadletsComponent);
       components.put(componentId, result);
       return result;
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-      throw new RuntimeException(format("Can't find vaadin class for '%s'", c), e);
+      throw new IllegalArgumentException(format("Can't create vaadin component for vaadlets component '%s'",
+          vaadletsComponent), e);
     }
   }
 

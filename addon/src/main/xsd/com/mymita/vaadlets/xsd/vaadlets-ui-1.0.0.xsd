@@ -50,14 +50,12 @@
   </complexType>
   <complexType name="verticalSplitPanel">
     <complexContent>
-      <extension base="ui:abstractSplitPanel">
-      </extension>
+      <extension base="ui:abstractSplitPanel"/>
     </complexContent>
   </complexType>
   <complexType name="horizontalSplitPanel">
     <complexContent>
-      <extension base="ui:abstractSplitPanel">
-      </extension>
+      <extension base="ui:abstractSplitPanel"/>
     </complexContent>
   </complexType>
   <simpleType name="windowBorder">
@@ -89,6 +87,18 @@
       </extension>
     </complexContent>
   </complexType>
+  <complexType name="tabSheet">
+    <complexContent>
+      <extension base="core:componentContainer"/>
+    </complexContent>
+  </complexType>
+  <complexType name="button">
+    <complexContent>
+      <extension base="input:abstractField">
+        <attribute name="disable-on-click" type="boolean" default="false"/>
+      </extension>
+    </complexContent>
+  </complexType>
   <group name="components">
     <choice>
       <element ref="ui:panel"/>
@@ -96,6 +106,8 @@
       <element ref="ui:horizontalSplitPanel"/>
       <element ref="ui:window"/>
       <element ref="ui:label"/>
+      <element ref="ui:tabSheet"/>
+      <element ref="ui:button"/>
     </choice>
   </group>
   <element name="panel" type="ui:panel"/>
@@ -103,4 +115,6 @@
   <element name="verticalSplitPanel" type="ui:verticalSplitPanel"/>
   <element name="window" type="ui:window"/>
   <element name="label" type="ui:label"/>
+  <element name="tabSheet" type="ui:tabSheet"/>
+  <element name="button" type="ui:button"/>
 </schema>

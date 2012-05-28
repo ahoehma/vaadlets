@@ -47,6 +47,7 @@
     <attributeGroup ref="core:styleAttributes"/>
     <attributeGroup ref="core:sizeAttributes"/>
     <attributeGroup ref="core:layoutAttributes"/>
+    <attributeGroup ref="core:tabAttributes"/>
   </complexType>
   <attributeGroup name="layoutAttributes">
     <attribute name="column" type="short"/>
@@ -64,6 +65,9 @@
   </attributeGroup>
   <attributeGroup name="styleAttributes">
     <attribute name="style-name" type="string" />
+  </attributeGroup>
+  <attributeGroup name="tabAttributes">
+    <attribute name="tab-position" type="short"/>
   </attributeGroup>
   <complexType name="componentContainer" abstract="true">
     <complexContent>

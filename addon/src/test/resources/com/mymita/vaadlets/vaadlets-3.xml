@@ -30,8 +30,8 @@
       <layout:verticalLayout size-full="true">
         <input:textField id="editor" size-full="true" expand-ratio="1.0"/>
         <layout:horizontalLayout>
-          <input:button id="test" caption="Test Vaadlet"/>
-          <input:button id="reset" caption="Reset Vaadlet"/>
+          <ui:button id="test" caption="Test Vaadlet"/>
+          <ui:button id="reset" caption="Reset Vaadlet"/>
         </layout:horizontalLayout>
       </layout:verticalLayout>
       <ui:panel id="content"/>

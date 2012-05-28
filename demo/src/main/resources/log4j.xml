@@ -23,7 +23,7 @@
     </layout>
   </appender>
 
-  <category name="com.mymita.vaadlets.addon.VaadletsBuilder">
+  <category name="com.mymita.vaadlets.VaadletsBuilder">
     <priority value="debug" />
   </category>
 

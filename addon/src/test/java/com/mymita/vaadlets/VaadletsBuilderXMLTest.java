@@ -27,15 +27,6 @@ import org.testng.annotations.Test;
  */
 public class VaadletsBuilderXMLTest {
 
-  static class User {
-    String name, street;
-
-    public User(final String name, final String street) {
-      this.name = name;
-      this.street = street;
-    }
-  }
-
   private static InputStreamReader reader(final String xmlFile) throws IOException {
     return new InputStreamReader(new ClassPathResource(xmlFile, VaadletsBuilderXMLTest.class).getInputStream());
   }
@@ -66,6 +57,8 @@ public class VaadletsBuilderXMLTest {
         "vaadlets-3.xml"
       }, {
         "vaadlets-4.xml"
+      }, {
+        "vaadlets-5.xml"
       },
     };
   }

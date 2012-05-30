@@ -20,7 +20,9 @@
         xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
         xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
         xmlns:input="http://www.mymita.com/vaadlets/input/1.0.0"
+        xmlns:vaadlets="http://www.mymita.com/vaadlets/1.0.0"
         elementFormDefault="qualified">
+  <import namespace="http://www.mymita.com/vaadlets/1.0.0" schemaLocation="vaadlets-1.0.0.xsd"/>
   <import namespace="http://www.mymita.com/vaadlets/core/1.0.0" schemaLocation="vaadlets-core-1.0.0.xsd"/>
   <import namespace="http://www.mymita.com/vaadlets/layout/1.0.0" schemaLocation="vaadlets-layout-1.0.0.xsd"/>
   <import namespace="http://www.mymita.com/vaadlets/input/1.0.0" schemaLocation="vaadlets-input-1.0.0.xsd"/>
@@ -92,6 +94,38 @@
       <extension base="core:componentContainer"/>
     </complexContent>
   </complexType>
+  <complexType name="popupView">
+    <complexContent>
+      <extension base="core:component">
+        <all>
+          <element name="small" type="string"/>
+          <element name="large">
+            <complexType mixed="true">
+              <choice>
+                <group ref="vaadlets:components"/>
+              </choice>
+            </complexType>          
+          </element>
+        </all>
+        <attribute name="hide-on-mouse-out" type="boolean" default="false"/>
+      </extension>
+    </complexContent>
+  </complexType>
+  <simpleType name="embeddedType">
+    <restriction base="string">
+      <enumeration value="OBJECT"/>
+      <enumeration value="IMAGE"/>
+      <enumeration value="BROWSER"/>
+    </restriction>
+  </simpleType>
+  <complexType name="embedded">
+    <complexContent>
+      <extension base="core:component">
+        <attribute name="type" type="ui:embeddedType" default="OBJECT"/>
+        <attribute name="source" type="string"/>
+      </extension>
+    </complexContent>
+  </complexType>
   <complexType name="button">
     <complexContent>
       <extension base="input:abstractField">
@@ -108,6 +142,8 @@
       <element ref="ui:label"/>
       <element ref="ui:tabSheet"/>
       <element ref="ui:button"/>
+      <element ref="ui:popupView"/>
+      <element ref="ui:embedded"/>
     </choice>
   </group>
   <element name="panel" type="ui:panel"/>
@@ -117,4 +153,6 @@
   <element name="label" type="ui:label"/>
   <element name="tabSheet" type="ui:tabSheet"/>
   <element name="button" type="ui:button"/>
+  <element name="popupView" type="ui:popupView"/>
+  <element name="embedded" type="ui:embedded"/>
 </schema>

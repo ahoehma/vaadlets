@@ -24,13 +24,13 @@
                       http://www.mymita.com/vaadlets/ui/1.0.0 http://www.mymita.com/xsd/vaadlets-ui-1.0.0.xsd
                       http://www.mymita.com/vaadlets/input/1.0.0 http://www.mymita.com/xsd/vaadlets-input-1.0.0.xsd
                       http://www.mymita.com/vaadlets/addon/1.0.0 http://www.mymita.com/xsd/vaadlets-addon-1.0.0.xsd">
-  <ui:window caption="Vaadlets Editor">
-    <ui:window caption="Welcome" width="300px" height="200px" center="true" resizeable="false" modal="true">
-      <layout:verticalLayout size-full="true" margin="true">
-        <ui:label caption="Welcome to the Vaadlets DEMO Application" alignment="top_center"/>
-        <ui:button caption="close" alignment="middle_center"/>
-      </layout:verticalLayout>
-    </ui:window>
+  <ui:window caption="Vaadlets Demo">
+<!--     <ui:window caption="Welcome" width="300px" height="200px" center="true" resizeable="false" modal="true"> -->
+<!--       <layout:verticalLayout size-full="true" margin="true"> -->
+<!--         <ui:label caption="Welcome to the Vaadlets DEMO Application" alignment="top_center"/> -->
+<!--         <ui:button caption="close" alignment="middle_center"/> -->
+<!--       </layout:verticalLayout> -->
+<!--     </ui:window> -->
     <ui:tabSheet size-full="true">
       <ui:horizontalSplitPanel caption="Editor" tab-position="0">
         <layout:verticalLayout size-full="true" margin="true" spacing="true">
@@ -48,9 +48,41 @@
           <layout:verticalLayout margin="true" size-full="true" />
         </ui:panel>
       </ui:horizontalSplitPanel>
-      <layout:verticalLayout size-full="true" caption="Example #1" tab-position="1">
+      <layout:verticalLayout size-full="true" tab-position="1" caption="Example #1">
+        <ui:panel scrollable="true" size-full="true">
+          <layout:verticalLayout size-full="true">
+            <ui:label caption="This Panel show some form fields" height="150px" width="100%"/>
+            <layout:formLayout size-full="true">
+              <input:textField width="120px" caption="text field #1"/>
+              <input:textField width="100%" caption="text field #2"/>
+            </layout:formLayout>
+          </layout:verticalLayout>
+        </ui:panel>
       </layout:verticalLayout>
       <layout:verticalLayout size-full="true" caption="Example #2" tab-position="2">
+      </layout:verticalLayout>
+      <layout:verticalLayout size-full="true" caption="PopupView" tab-position="3">
+        <ui:popupView caption="popup 1">
+          <ui:small>popup 1 - the minimal textual representation as HTML</ui:small>
+          <ui:large>
+            <ui:panel height="200px" width="200px">
+              <layout:verticalLayout size-full="true" margin="true">
+                <ui:label caption="hello world"/>
+                <ui:embedded type="IMAGE" source="theme:/img/hoehmi.jpg"/>
+              </layout:verticalLayout>
+            </ui:panel>
+          </ui:large>
+        </ui:popupView>
+        <ui:popupView caption="popup 2">
+          <ui:small>popup 2 - the minimal textual representation as HTML</ui:small>
+          <ui:large>
+            <ui:panel height="20px" width="200px">
+              <layout:verticalLayout size-full="true">
+                <ui:label caption="hello world"/>
+              </layout:verticalLayout>
+            </ui:panel>
+          </ui:large>
+        </ui:popupView>
       </layout:verticalLayout>
     </ui:tabSheet>
   </ui:window>

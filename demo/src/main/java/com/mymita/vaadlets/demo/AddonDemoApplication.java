@@ -73,6 +73,7 @@ public class AddonDemoApplication extends Application {
     }
     final Window root = (Window) vaadlets.getRoot();
     setMainWindow(root);
+    setTheme("vaadlets");
 
     final Button testButton = vaadlets.getComponent("test");
     testButton.addListener(new ClickListener() {

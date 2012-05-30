@@ -20,22 +20,31 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.String.format;
 
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.util.UUID;
+
+import javax.xml.bind.JAXBElement;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.vaadin.codemirror.CodeMirror;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mymita.vaadlets.layout.GridLayoutColumExpandRatio;
 import com.mymita.vaadlets.layout.GridLayoutRowExpandRatio;
+import com.vaadin.terminal.ThemeResource;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.PopupView;
 import com.vaadin.ui.VerticalLayout;
 
 /**
@@ -152,6 +161,40 @@ public class VaadletsBuilder {
     }
   }
 
+  private static void setEmbeddedAttributes(final com.vaadin.ui.Component vaadinComponent,
+      final com.mymita.vaadlets.core.Component vaadletsComponent) {
+    if (vaadletsComponent instanceof com.mymita.vaadlets.ui.Embedded) {
+      final String source = ((com.mymita.vaadlets.ui.Embedded) vaadletsComponent).getSource();
+      if (source.startsWith("theme:")) {
+        try {
+          System.out.println(source);
+          final URI uri = new URI(source);
+          final String theme = uri.getHost();
+          final String path = uri.getPath();
+          System.out.println(path);
+          final String resourceId = URLDecoder.decode(path.replaceFirst("/", ""), Charsets.UTF_8.toString());
+          System.out.println(resourceId);
+          ((com.vaadin.ui.Embedded) vaadinComponent).setSource(new ThemeResource(resourceId));
+        } catch (final URISyntaxException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        } catch (final UnsupportedEncodingException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+      }
+    }
+  }
+
+  private static void setInputAttributes(final com.vaadin.ui.Component vaadinComponent,
+      final com.mymita.vaadlets.core.Component vaadletsComponent) {
+    if (vaadletsComponent instanceof com.mymita.vaadlets.input.AbstractField) {
+      final com.mymita.vaadlets.input.AbstractField field = (com.mymita.vaadlets.input.AbstractField) vaadletsComponent;
+      final String value = field.getValue();
+      // TODO check for el expressions
+    }
+  }
+
   private static void setLayoutAttributes(final com.vaadin.ui.Component vaadinComponent,
       final com.mymita.vaadlets.core.Component vaadletsComponent) {
     if (vaadletsComponent instanceof com.mymita.vaadlets.layout.AbstractLayout) {
@@ -245,6 +288,7 @@ public class VaadletsBuilder {
   }
 
   private final BiMap<String, com.vaadin.ui.Component> components = HashBiMap.create();
+
   private com.vaadin.ui.Component root;
 
   public void build(final Reader aReader) {
@@ -266,17 +310,13 @@ public class VaadletsBuilder {
     LOG.debug(format("Create child components for vaadin parent '%s' from vaadlets component container '%s'",
         vaadinParentComponent, vaadletsComponentContainer));
     for (final com.mymita.vaadlets.core.Component vaadletsComponent : vaadletsComponentContainer.getComponents()) {
-      final com.vaadin.ui.Component vaadinComponent = createVaadinComponent(vaadletsComponent);
+      final com.vaadin.ui.Component vaadinComponent = createVaadinComponentWithChildren(vaadletsComponent);
       addComponent(vaadinParentComponent, vaadletsComponentContainer, vaadinComponent, vaadletsComponent);
-      if (vaadletsComponent instanceof com.mymita.vaadlets.core.ComponentContainer) {
-        createChildComponents(vaadinComponent, (com.mymita.vaadlets.core.ComponentContainer) vaadletsComponent);
-      }
     }
   }
 
   private com.vaadin.ui.Component createComponent(final com.mymita.vaadlets.core.Component vaadletComponent)
       throws ClassNotFoundException, InstantiationException, IllegalAccessException {
-    String vaadinComponentClassName = null;
     if (vaadletComponent instanceof com.mymita.vaadlets.addon.CodeMirror) {
       // TODO build tag handler to adapt custom tags
       final com.mymita.vaadlets.addon.CodeMirror cm = (com.mymita.vaadlets.addon.CodeMirror) vaadletComponent;
@@ -291,6 +331,17 @@ public class VaadletsBuilder {
         throw new IllegalArgumentException(format("Can't create vaadin component for vaadlets component '%s'",
             vaadletComponent), e);
       }
+    }
+    String vaadinComponentClassName = null;
+    if (vaadletComponent instanceof com.mymita.vaadlets.ui.PopupView) {
+      // TODO build tag handler to adapt custom tags
+      final com.mymita.vaadlets.ui.PopupView popupView = (com.mymita.vaadlets.ui.PopupView) vaadletComponent;
+      final String small = popupView.getSmall();
+      final com.mymita.vaadlets.core.Component large = ((JAXBElement<com.mymita.vaadlets.core.Component>) popupView
+          .getLarge().getContent().get(0)).getValue();
+      LOG.debug(format("Create vaadin component '%s' with small '%s' and large '%s'", vaadinComponentClassName, small,
+          large));
+      return new PopupView(small, createVaadinComponentWithChildren(large));
     }
     vaadinComponentClassName = "com.vaadin.ui." + vaadletComponent.getClass().getSimpleName();
     LOG.debug(format("Create vaadin component '%s'", vaadinComponentClassName));
@@ -313,12 +364,22 @@ public class VaadletsBuilder {
       setWindowAttributes(result, vaadletsComponent);
       setLayoutAttributes(result, vaadletsComponent);
       setInputAttributes(result, vaadletsComponent);
+      setEmbeddedAttributes(result, vaadletsComponent);
       components.put(componentId, result);
       return result;
     } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
       throw new IllegalArgumentException(format("Can't create vaadin component for vaadlets component '%s'",
           vaadletsComponent), e);
     }
+  }
+
+  private com.vaadin.ui.Component createVaadinComponentWithChildren(
+      final com.mymita.vaadlets.core.Component vaadletsComponent) {
+    final com.vaadin.ui.Component vaadinComponent = createVaadinComponent(vaadletsComponent);
+    if (vaadletsComponent instanceof com.mymita.vaadlets.core.ComponentContainer) {
+      createChildComponents(vaadinComponent, (com.mymita.vaadlets.core.ComponentContainer) vaadletsComponent);
+    }
+    return vaadinComponent;
   }
 
   @SuppressWarnings("unchecked")
@@ -328,14 +389,5 @@ public class VaadletsBuilder {
 
   public Component getRoot() {
     return root;
-  }
-
-  private void setInputAttributes(final Component vaadinComponent,
-      final com.mymita.vaadlets.core.Component vaadletsComponent) {
-    if (vaadletsComponent instanceof com.mymita.vaadlets.input.AbstractField) {
-      final com.mymita.vaadlets.input.AbstractField field = (com.mymita.vaadlets.input.AbstractField) vaadletsComponent;
-      final String value = field.getValue();
-      // TODO check for el expressions
-    }
   }
 }

@@ -18,7 +18,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.mymita</groupId>
   <artifactId>vaadlets-root</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>vaadlets root project</name>
   <url>http://www.mymita.com/index.php/products/vaadlets</url>

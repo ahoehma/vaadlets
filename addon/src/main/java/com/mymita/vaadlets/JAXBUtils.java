@@ -16,7 +16,6 @@
 package com.mymita.vaadlets;
 
 import static java.lang.String.format;
-import static org.apache.commons.lang3.ClassUtils.getPackageCanonicalName;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -33,6 +32,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
+import org.apache.commons.lang.ClassUtils;
 import org.apache.xerces.dom.DOMInputImpl;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -71,12 +71,12 @@ public final class JAXBUtils {
 
   private static final String CONTEXTPATH = Joiner.on(":").join(
       new String[] {
-        getPackageCanonicalName(com.mymita.vaadlets.ObjectFactory.class),
-        getPackageCanonicalName(com.mymita.vaadlets.core.ObjectFactory.class),
-        getPackageCanonicalName(com.mymita.vaadlets.layout.ObjectFactory.class),
-        getPackageCanonicalName(com.mymita.vaadlets.ui.ObjectFactory.class),
-        getPackageCanonicalName(com.mymita.vaadlets.input.ObjectFactory.class),
-        getPackageCanonicalName(com.mymita.vaadlets.addon.ObjectFactory.class),
+        ClassUtils.getPackageCanonicalName(com.mymita.vaadlets.ObjectFactory.class),
+        ClassUtils.getPackageCanonicalName(com.mymita.vaadlets.core.ObjectFactory.class),
+        ClassUtils.getPackageCanonicalName(com.mymita.vaadlets.layout.ObjectFactory.class),
+        ClassUtils.getPackageCanonicalName(com.mymita.vaadlets.ui.ObjectFactory.class),
+        ClassUtils.getPackageCanonicalName(com.mymita.vaadlets.input.ObjectFactory.class),
+        ClassUtils.getPackageCanonicalName(com.mymita.vaadlets.addon.ObjectFactory.class),
       });
 
   private static final Map<String, ClassPathResource> SCHEMAS = ImmutableMap

@@ -26,6 +26,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import javax.xml.bind.JAXBElement;
@@ -38,10 +40,14 @@ import com.google.common.base.Charsets;
 import com.google.common.base.Objects;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Maps;
 import com.mymita.vaadlets.layout.GridLayoutColumExpandRatio;
 import com.mymita.vaadlets.layout.GridLayoutRowExpandRatio;
 import com.vaadin.terminal.ThemeResource;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Component;
+import com.vaadin.ui.Component.Listener;
 import com.vaadin.ui.ComponentContainer;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.PopupView;
@@ -141,6 +147,18 @@ public class VaadletsBuilder {
     ((com.vaadin.ui.ComponentContainer) vaadinParent).addComponent(vaadinComponent);
   }
 
+  public static VaadletsBuilder build(final com.mymita.vaadlets.core.Component aComponent) {
+    final VaadletsBuilder builder = new VaadletsBuilder();
+    builder.create(aComponent);
+    return builder;
+  }
+
+  public static VaadletsBuilder build(final Reader aReader) {
+    final VaadletsBuilder builder = new VaadletsBuilder();
+    builder.create(JAXBUtils.unmarshal(aReader).getRootComponent());
+    return builder;
+  }
+
   private static void setComponentAttributes(final com.vaadin.ui.Component vaadinComponent,
       final com.mymita.vaadlets.core.Component c) {
     vaadinComponent.setCaption(c.getCaption());
@@ -167,20 +185,13 @@ public class VaadletsBuilder {
       final String source = ((com.mymita.vaadlets.ui.Embedded) vaadletsComponent).getSource();
       if (source.startsWith("theme:")) {
         try {
-          System.out.println(source);
           final URI uri = new URI(source);
           final String theme = uri.getHost();
           final String path = uri.getPath();
-          System.out.println(path);
           final String resourceId = URLDecoder.decode(path.replaceFirst("/", ""), Charsets.UTF_8.toString());
-          System.out.println(resourceId);
           ((com.vaadin.ui.Embedded) vaadinComponent).setSource(new ThemeResource(resourceId));
         } catch (final URISyntaxException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
         } catch (final UnsupportedEncodingException e) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
         }
       }
     }
@@ -288,20 +299,41 @@ public class VaadletsBuilder {
   }
 
   private final BiMap<String, com.vaadin.ui.Component> components = HashBiMap.create();
+  private final Map<String, Listener> componentListener = Maps.newHashMap();
+  private final Map<String, ClickListener> clickListener = Maps.newHashMap();
 
   private com.vaadin.ui.Component root;
 
-  public void build(final Reader aReader) {
-    final com.mymita.vaadlets.core.Component r = JAXBUtils.unmarshal(aReader).getRootComponent();
-    if (!(r instanceof com.mymita.vaadlets.core.ComponentContainer)) {
+  public VaadletsBuilder addClickListener(final String id, final ClickListener aListener) {
+    final Component component = getComponent(id);
+    if (component instanceof Button) {
+      ((Button) component).addListener(aListener);
+    }
+    return this;
+  }
+
+  private void create(final com.mymita.vaadlets.core.Component aComponent) {
+    if (!(aComponent instanceof com.mymita.vaadlets.core.ComponentContainer)) {
       // XXX create a dummy component container
       final VerticalLayout dummy = new VerticalLayout();
       dummy.setSizeFull();
       root = new CustomComponent(dummy);
-      dummy.addComponent(createVaadinComponent(r));
+      dummy.addComponent(createVaadinComponent(aComponent));
     } else {
-      root = createVaadinComponent(r);
-      createChildComponents(root, (com.mymita.vaadlets.core.ComponentContainer) r);
+      root = createVaadinComponent(aComponent);
+      createChildComponents(root, (com.mymita.vaadlets.core.ComponentContainer) aComponent);
+    }
+    for (final Entry<String, ClickListener> cl : clickListener.entrySet()) {
+      final Component component = getComponent(cl.getKey());
+      if (component instanceof Button) {
+        ((Button) component).addListener(cl.getValue());
+      }
+    }
+    for (final Entry<String, Listener> cl : componentListener.entrySet()) {
+      final Component component = getComponent(cl.getKey());
+      if (component != null) {
+        component.addListener(cl.getValue());
+      }
     }
   }
 
@@ -389,5 +421,15 @@ public class VaadletsBuilder {
 
   public Component getRoot() {
     return root;
+  }
+
+  public VaadletsBuilder withClickListener(final String id, final ClickListener aListener) {
+    clickListener.put(id, aListener);
+    return this;
+  }
+
+  public VaadletsBuilder withComponentListener(final String id, final Listener aListener) {
+    componentListener.put(id, aListener);
+    return this;
   }
 }

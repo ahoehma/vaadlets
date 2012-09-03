@@ -15,16 +15,17 @@
   limitations under the License.
 -->
 <vaadlets xmlns="http://www.mymita.com/vaadlets/1.0.0"
+          xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance"
           xmlns:core="http://www.mymita.com/vaadlets/core/1.0.0"
           xmlns:layout="http://www.mymita.com/vaadlets/layout/1.0.0"
           xmlns:ui="http://www.mymita.com/vaadlets/ui/1.0.0"
           xmlns:addon="http://www.mymita.com/vaadlets/addon/1.0.0"
-          xmlns:xsd="http://www.w3.org/2001/XMLSchema-instance"
           xsd:schemaLocation="http://www.mymita.com/vaadlets/1.0.0 http://www.mymita.com/xsd/vaadlets-1.0.0.xsd
                               http://www.mymita.com/vaadlets/core/1.0.0 http://www.mymita.com/xsd/vaadlets-core-1.0.0.xsd
                               http://www.mymita.com/vaadlets/layout/1.0.0 http://www.mymita.com/xsd/vaadlets-layout-1.0.0.xsd
                               http://www.mymita.com/vaadlets/ui/1.0.0 http://www.mymita.com/xsd/vaadlets-ui-1.0.0.xsd
                               http://www.mymita.com/vaadlets/addon/1.0.0 http://www.mymita.com/xsd/vaadlets-addon-1.0.0.xsd">
+  
   <layout:verticalLayout>
     <ui:popupView>
       <ui:small>foobar</ui:small>

@@ -20,8 +20,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.juli.logging.Log;
+import org.apache.juli.logging.LogFactory;
 import org.springframework.core.io.ClassPathResource;
 
 import com.google.common.io.CharStreams;
@@ -64,48 +64,45 @@ public class AddonDemoApplication extends Application {
 
   @Override
   public void init() {
-    final VaadletsBuilder vaadlets = new VaadletsBuilder();
     try {
-      vaadlets.build(new InputStreamReader(new ClassPathResource("demo.xml", AddonDemoApplication.class)
-          .getInputStream()));
-    } catch (final IOException e) {
-      LOG.error("error", e);
-    }
-    final Window root = (Window) vaadlets.getRoot();
-    setMainWindow(root);
-    setTheme("vaadlets");
+      final VaadletsBuilder vaadletsBuilder = VaadletsBuilder.build(new InputStreamReader(new ClassPathResource(
+          "demo.xml", AddonDemoApplication.class).getInputStream()));
+      final Window root = (Window) vaadletsBuilder.getRoot();
+      setMainWindow(root);
+      setTheme("vaadlets");
+      final Button testButton = vaadletsBuilder.getComponent("test");
+      testButton.addListener(new ClickListener() {
 
-    final Button testButton = vaadlets.getComponent("test");
-    testButton.addListener(new ClickListener() {
-
-      @Override
-      public void buttonClick(final ClickEvent event) {
-        final Panel content = vaadlets.getComponent("content");
-        final TextField editor = vaadlets.getComponent("editor");
-        content.getContent().removeAllComponents();
-        try {
-          final VaadletsBuilder v = new VaadletsBuilder();
-          v.build(CharStreams.newReaderSupplier((String) editor.getValue()).getInput());
-          if (v.getRoot() instanceof Window) {
-            final Window w = (Window) v.getRoot();
-            root.addWindow(w);
-          } else {
-            content.getContent().addComponent(v.getRoot());
+        @Override
+        public void buttonClick(final ClickEvent event) {
+          final Panel content = vaadletsBuilder.getComponent("content");
+          final TextField editor = vaadletsBuilder.getComponent("editor");
+          content.getContent().removeAllComponents();
+          try {
+            final VaadletsBuilder v = VaadletsBuilder.build(CharStreams.newReaderSupplier((String) editor.getValue())
+                .getInput());
+            if (v.getRoot() instanceof Window) {
+              final Window w = (Window) v.getRoot();
+              root.addWindow(w);
+            } else {
+              content.getContent().addComponent(v.getRoot());
+            }
+          } catch (final Exception e) {
+            LOG.error("error", e);
+            content.addComponent(createStackTraceLabel(e));
           }
-        } catch (final Exception e) {
-          LOG.error("error", e);
-          content.addComponent(createStackTraceLabel(e));
         }
-      }
-    });
-    final Button resetButton = vaadlets.getComponent("reset");
-    resetButton.addListener(new ClickListener() {
+      });
+      final Button resetButton = vaadletsBuilder.getComponent("reset");
+      resetButton.addListener(new ClickListener() {
 
-      @Override
-      public void buttonClick(final ClickEvent event) {
-        fillEditorWithDefaultXML(vaadlets);
-      }
-    });
-    fillEditorWithDefaultXML(vaadlets);
+        @Override
+        public void buttonClick(final ClickEvent event) {
+          fillEditorWithDefaultXML(vaadletsBuilder);
+        }
+      });
+      fillEditorWithDefaultXML(vaadletsBuilder);
+    } catch (final IOException e) {
+    }
   }
 }

@@ -53,11 +53,23 @@
       <timezone>+1</timezone>
     </contributor>
   </contributors>
+  <properties>
+    <gwt.version>2.4.0</gwt.version>
+  </properties>
+  <dependencyManagement>
+    <dependencies>
+      <!-- 6.8.0++ doesn't work with vaadin-embeded ?! -->
+      <dependency>
+        <groupId>com.vaadin</groupId>
+        <artifactId>vaadin</artifactId>
+        <version>6.7.6</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>com.vaadin</groupId>
       <artifactId>vaadin</artifactId>
-      <version>${vaadin.version}</version>
     </dependency>
     <dependency>
       <groupId>com.mymita</groupId>
@@ -65,19 +77,29 @@
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
     <dependency>
+      <groupId>com.bsb.common.vaadin</groupId>
+      <artifactId>com.bsb.common.vaadin.embed</artifactId>
+      <version>0.4</version>
+    </dependency>
+    <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.13</version>
       <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <version>3.1.1.RELEASE</version>
     </dependency>
   </dependencies>
   <build>
     <defaultGoal>jetty:run</defaultGoal>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+        </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
@@ -121,8 +143,6 @@
     </plugins>
     <pluginManagement>
       <plugins>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build 
-          itself. -->
         <plugin>
           <groupId>org.eclipse.m2e</groupId>
           <artifactId>lifecycle-mapping</artifactId>
@@ -157,6 +177,19 @@
                     <ignore></ignore>
                   </action>
                 </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <versionRange>[2.4.1,)</versionRange>
+                    <goals>
+                      <goal>clean</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
               </pluginExecutions>
             </lifecycleMappingMetadata>
           </configuration>
@@ -166,7 +199,8 @@
   </build>
   <profiles>
     <profile>
-      <id>vaadin-widgetset</id>
+      <!-- Updates Vaadin widgetset definitions based on project dependencies -->
+      <id>update-widgetset</id>
       <activation>
         <file>
           <missing>${basedir}/src/main/webapp/VAADIN/widgetsets/</missing>
@@ -178,8 +212,6 @@
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-maven-plugin</artifactId>
             <version>1.0.2</version>
-            <configuration>
-            </configuration>
             <executions>
               <execution>
                 <phase>generate-resources</phase>
@@ -192,13 +224,17 @@
           <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>gwt-maven-plugin</artifactId>
-            <version>2.3.0-1</version>
+            <version>${gwt.version}</version>
             <configuration>
               <webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets/</webappDirectory>
-              <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+              <extraJvmArgs>-Xmx512M -Xss1024k </extraJvmArgs>
               <deploy>${project.build.directory}/gwt-tmp/</deploy>
               <soyc>false</soyc>
               <force>true</force>
+              <strict>true</strict>
+              <style>OBFUSCATED</style>
+              <optimizationLevel>9</optimizationLevel>
+              <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
             </configuration>
             <executions>
               <execution>
@@ -206,6 +242,32 @@
                 <goals>
                   <goal>resources</goal>
                   <goal>compile</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <!-- workaround for http://code.google.com/p/google-web-toolkit/issues/detail?id=6397 -->
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>2.4.1</version>
+            <configuration>
+              <filesets>
+                <fileset>
+                  <directory>${basedir}/src/main/webapp/VAADIN/</directory>
+                  <includes>
+                    <directory>gwt-unitCache/**</directory>
+                  </includes>
+                  <followSymlinks>false</followSymlinks>
+                </fileset>
+              </filesets>
+              <excludeDefaultDirectories>true</excludeDefaultDirectories>
+            </configuration>
+            <executions>
+              <execution>
+                <id>default</id>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>clean</goal>
                 </goals>
               </execution>
             </executions>

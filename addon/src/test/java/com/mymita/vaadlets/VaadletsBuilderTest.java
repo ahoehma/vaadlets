@@ -15,8 +15,11 @@
  ******************************************************************************/
 package com.mymita.vaadlets;
 
+import static org.testng.Assert.assertNotNull;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.DataProvider;
@@ -24,26 +27,29 @@ import org.testng.annotations.Test;
 
 /**
  * @author Andreas Höhmann
+ * @since 0.0.1
  */
-public class VaadletsBuilderXMLTest {
+public class VaadletsBuilderTest implements Serializable {
+
+  private static final long serialVersionUID = -2707101566758503829L;
 
   private static InputStreamReader reader(final String xmlFile) throws IOException {
-    return new InputStreamReader(new ClassPathResource(xmlFile, VaadletsBuilderXMLTest.class).getInputStream());
+    return new InputStreamReader(new ClassPathResource(xmlFile, VaadletsBuilderTest.class).getInputStream());
   }
 
   @Test(dataProvider = "valid-xml-files")
   public void testBuild(final String xmlFile) throws IOException {
-    new VaadletsBuilder().build(reader(xmlFile));
+    assertNotNull(VaadletsBuilder.build(reader(xmlFile)).getRoot());
   }
 
   @Test(dataProvider = "valid-xml-files")
   public void testUnmarschal(final String xmlFile) throws IOException {
-    final Vaadlets v = JAXBUtils.unmarshal(reader(xmlFile), false);
+    assertNotNull(JAXBUtils.unmarshal(reader(xmlFile), false));
   }
 
   @Test(dataProvider = "valid-xml-files")
   public void testValidate(final String xmlFile) throws IOException {
-    final Vaadlets v = JAXBUtils.unmarshal(reader(xmlFile), true);
+    assertNotNull(JAXBUtils.unmarshal(reader(xmlFile), true));
   }
 
   @DataProvider(name = "valid-xml-files")

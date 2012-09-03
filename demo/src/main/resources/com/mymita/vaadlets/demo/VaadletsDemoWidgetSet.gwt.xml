@@ -15,8 +15,8 @@
   limitations under the License.
 -->
 <!DOCTYPE module PUBLIC
-    "-//Google Inc.//DTD Google Web Toolkit 2.3.0//EN"
-    "http://google-web-toolkit.googlecode.com/svn/tags/2.3.0/distro-source/core/src/gwt-module.dtd">
+    "-//Google Inc.//DTD Google Web Toolkit 2.4.0//EN"
+    "http://google-web-toolkit.googlecode.com/svn/tags/2.4.0/distro-source/core/src/gwt-module.dtd">
 <module>
     <inherits name="com.vaadin.terminal.gwt.DefaultWidgetSet" />
     <inherits name="org.vaadin.codemirror.CodemirrorWidgetset" />

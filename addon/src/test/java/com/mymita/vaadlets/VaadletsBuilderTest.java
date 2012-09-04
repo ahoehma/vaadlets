@@ -17,13 +17,24 @@ package com.mymita.vaadlets;
 
 import static org.testng.Assert.assertNotNull;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
 
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
+import com.mymita.vaadlets.layout.Alignment;
+import com.mymita.vaadlets.layout.VerticalLayout;
+import com.mymita.vaadlets.ui.Button;
+import com.vaadin.ui.themes.BaseTheme;
 
 /**
  * @author Andreas Höhmann
@@ -40,6 +51,44 @@ public class VaadletsBuilderTest implements Serializable {
   @Test(dataProvider = "valid-xml-files")
   public void testBuild(final String xmlFile) throws IOException {
     assertNotNull(VaadletsBuilder.build(reader(xmlFile)).getRoot());
+  }
+
+  @Test
+  public void testBuildComponent() {
+    VaadletsBuilder.build(
+        new Button().withId("foobar").withCaption("Foobar").withStyleName(BaseTheme.BUTTON_LINK).withWidth("100px"))
+        .getRoot();
+  }
+
+  @Test
+  public void testBuildVaadlets() {
+    VaadletsBuilder.build(new Vaadlets().withRootComponent(new VerticalLayout()
+        .withHeight("100px")
+        .withWidth("100px")
+        .withStyleName("foobar")
+        .withComponents(
+            new Button().withCaption("hustensaft").withAlignment(Alignment.MIDDLE_CENTER).withExpandRatio(1f))));
+  }
+
+  @Test
+  public void testFluentApi() {
+    VaadletsBuilder.build(
+        new Button().withId("foobar").withCaption("Foobar").withStyleName(BaseTheme.BUTTON_LINK).withWidth("100px"))
+        .getRoot();
+  }
+
+  @Test
+  public void testPersistVaadlets() throws FileNotFoundException, IOException {
+    final File tempFile = File.createTempFile("foo", ".xml");
+    VaadletsBuilder.build(
+        new Vaadlets().withRootComponent(new VerticalLayout()
+            .withHeight("100px")
+            .withWidth("100px")
+            .withStyleName("foobar")
+            .withComponents(
+                new Button().withCaption("hustensaft").withAlignment(Alignment.MIDDLE_CENTER).withExpandRatio(1f))))
+        .output(new OutputStreamWriter(new FileOutputStream(tempFile)));
+    System.out.println(Files.toString(tempFile, Charsets.UTF_8));
   }
 
   @Test(dataProvider = "valid-xml-files")

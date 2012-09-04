@@ -21,6 +21,7 @@ import static java.lang.String.format;
 
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
@@ -150,6 +151,12 @@ public class VaadletsBuilder {
   public static VaadletsBuilder build(final com.mymita.vaadlets.core.Component aComponent) {
     final VaadletsBuilder builder = new VaadletsBuilder();
     builder.create(aComponent);
+    return builder;
+  }
+
+  public static VaadletsBuilder build(final com.mymita.vaadlets.Vaadlets vaadlets) {
+    final VaadletsBuilder builder = new VaadletsBuilder();
+    builder.create(vaadlets.getRootComponent());
     return builder;
   }
 
@@ -303,6 +310,7 @@ public class VaadletsBuilder {
   private final Map<String, ClickListener> clickListener = Maps.newHashMap();
 
   private com.vaadin.ui.Component root;
+  private com.mymita.vaadlets.core.Component component;
 
   public VaadletsBuilder addClickListener(final String id, final ClickListener aListener) {
     final Component component = getComponent(id);
@@ -313,6 +321,7 @@ public class VaadletsBuilder {
   }
 
   private void create(final com.mymita.vaadlets.core.Component aComponent) {
+    component = aComponent;
     if (!(aComponent instanceof com.mymita.vaadlets.core.ComponentContainer)) {
       // XXX create a dummy component container
       final VerticalLayout dummy = new VerticalLayout();
@@ -421,6 +430,10 @@ public class VaadletsBuilder {
 
   public Component getRoot() {
     return root;
+  }
+
+  public void output(final Writer aWriter) {
+    JAXBUtils.marshal(aWriter, new Vaadlets().withRootComponent(this.component));
   }
 
   public VaadletsBuilder withClickListener(final String id, final ClickListener aListener) {

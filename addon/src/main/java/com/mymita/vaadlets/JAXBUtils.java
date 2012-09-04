@@ -15,16 +15,21 @@
  ******************************************************************************/
 package com.mymita.vaadlets;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Writer;
 import java.util.Map;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.namespace.QName;
 import javax.xml.stream.FactoryConfigurationError;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -41,7 +46,10 @@ import org.w3c.dom.ls.LSResourceResolver;
 import org.xml.sax.SAXException;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
+import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
 /**
  * @author Andreas Höhmann
@@ -92,6 +100,48 @@ public final class JAXBUtils {
           new ClassPathResource("com/mymita/vaadlets/xsd/vaadlets-input-1.0.0.xsd"))
       .put("http://www.mymita.com/vaadlets/addon/1.0.0",
           new ClassPathResource("com/mymita/vaadlets/xsd/vaadlets-addon-1.0.0.xsd")).build();
+
+  public static void marshal(final Writer aWriter, final Vaadlets vaadlets) {
+    marshal(aWriter, vaadlets, true);
+  }
+
+  public static final void marshal(final Writer aWriter, final Vaadlets vaadlets, final boolean validation) {
+    if (validation) {
+      marshal(aWriter, vaadlets, SCHEMAS.get("http://www.mymita.com/vaadlets/1.0.0"));
+    } else {
+      marshal(aWriter, vaadlets, null);
+    }
+  }
+
+  private static final void marshal(final Writer aWriter, final Vaadlets vaadlets, final Resource theSchemaResource) {
+    try {
+      final JAXBContext jc = JAXBContext.newInstance(CONTEXTPATH);
+      final Marshaller marshaller = jc.createMarshaller();
+      if (theSchemaResource != null) {
+        final SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        schemaFactory.setResourceResolver(new ClasspathResourceResolver());
+        final Schema schema = schemaFactory.newSchema(new StreamSource(theSchemaResource.getInputStream()));
+        marshaller.setSchema(schema);
+      }
+      marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+      marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+      marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new NamespacePrefixMapper() {
+
+        @Override
+        public String getPreferredPrefix(final String namespaceUri, final String suggestion, final boolean requirePrefix) {
+          final String subpackage = namespaceUri.replaceFirst("http://www.mymita.com/vaadlets/", "");
+          if (subpackage.equals("1.0.0")) {
+            return "";
+          }
+          return Iterables.getFirst(newArrayList(Splitter.on("/").split(subpackage).iterator()), "");
+        }
+      });
+      marshaller.marshal(new JAXBElement<Vaadlets>(new QName("http://www.mymita.com/vaadlets/1.0.0", "vaadlets", ""),
+          Vaadlets.class, vaadlets), aWriter);
+    } catch (final JAXBException | SAXException | FactoryConfigurationError | IOException e) {
+      throw new RuntimeException("Can't marschal", e);
+    }
+  }
 
   public static final Vaadlets unmarshal(final Reader aReader) {
     return unmarshal(aReader, true);

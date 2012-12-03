@@ -49,7 +49,6 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
-import com.sun.xml.bind.marshaller.NamespacePrefixMapper;
 
 /**
  * @author Andreas Höhmann
@@ -125,7 +124,7 @@ public final class JAXBUtils {
       }
       marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
       marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-      marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new NamespacePrefixMapper() {
+      marshaller.setProperty("com.sun.xml.bind.namespacePrefixMapper", new com.sun.xml.internal.bind.marshaller.NamespacePrefixMapper () {
 
         @Override
         public String getPreferredPrefix(final String namespaceUri, final String suggestion, final boolean requirePrefix) {
